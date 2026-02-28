@@ -1,3 +1,5 @@
+import type React from "react";
+
 export type UserRole =
   | "soc_operator"
   | "customer_admin"
@@ -73,13 +75,13 @@ export const DEMO_USERS: DemoUser[] = [
   },
 ];
 
-export const ROLE_COLORS: Record<UserRole, string> = {
-  soc_operator: "!bg-[#C8102E] !text-white",
-  customer_admin: "!bg-blue-600 !text-white",
-  customer_user: "!bg-emerald-600 !text-white",
-  field_user: "!bg-gray-700 !text-white",
-  oem_partner: "!bg-purple-600 !text-white",
-  g4s_admin: "!bg-[#C8102E] !text-white",
+export const ROLE_STYLES: Record<UserRole, React.CSSProperties> = {
+  soc_operator: { backgroundColor: "#C8102E", color: "#fff" },
+  customer_admin: { backgroundColor: "#2563EB", color: "#fff" },
+  customer_user: { backgroundColor: "#059669", color: "#fff" },
+  field_user: { backgroundColor: "#374151", color: "#fff" },
+  oem_partner: { backgroundColor: "#9333EA", color: "#fff" },
+  g4s_admin: { backgroundColor: "#C8102E", color: "#fff" },
 };
 
 /** Internal G4S roles get dark (black) theme; external roles get light (white) theme */

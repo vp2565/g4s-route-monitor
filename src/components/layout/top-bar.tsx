@@ -3,7 +3,6 @@
 import { Bell, Search, LogOut, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/auth-context";
-import { DEMO_USERS, ROLE_COLORS, UserRole } from "@/types";
+import { DEMO_USERS, ROLE_STYLES, UserRole } from "@/types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -74,15 +73,12 @@ export function TopBar() {
         </Button>
 
         {/* Role badge */}
-        <Badge
-          variant="outline"
-          className={cn(
-            "text-xs font-medium border-none",
-            ROLE_COLORS[user.role]
-          )}
+        <span
+          className="inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold"
+          style={ROLE_STYLES[user.role]}
         >
           {user.roleLabel}
-        </Badge>
+        </span>
 
         {/* User dropdown / role switcher */}
         <DropdownMenu>

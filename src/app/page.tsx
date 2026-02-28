@@ -2,13 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
-import { DEMO_USERS, ROLE_COLORS, DemoUser } from "@/types";
+import { DEMO_USERS, ROLE_STYLES, DemoUser } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { PrototypeBanner } from "@/components/layout/prototype-banner";
 import { Shield, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 
 export default function LoginPage() {
@@ -66,15 +64,12 @@ export default function LoginPage() {
                     <h3 className="text-white font-semibold text-sm truncate">
                       {demoUser.name}
                     </h3>
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "mt-1.5 text-[10px] font-medium border-none",
-                        ROLE_COLORS[demoUser.role]
-                      )}
+                    <span
+                      className="mt-1.5 inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-semibold"
+                      style={ROLE_STYLES[demoUser.role]}
                     >
                       {demoUser.roleLabel}
-                    </Badge>
+                    </span>
                     <p className="text-gray-500 text-xs mt-2 truncate">
                       {demoUser.customer}
                     </p>
