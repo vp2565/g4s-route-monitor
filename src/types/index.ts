@@ -74,12 +74,12 @@ export const DEMO_USERS: DemoUser[] = [
 ];
 
 export const ROLE_COLORS: Record<UserRole, string> = {
-  soc_operator: "bg-[#C8102E] text-white",
-  customer_admin: "bg-blue-600 text-white",
-  customer_user: "bg-emerald-600 text-white",
-  field_user: "bg-gray-700 text-white",
-  oem_partner: "bg-purple-600 text-white",
-  g4s_admin: "bg-[#C8102E] text-white",
+  soc_operator: "!bg-[#C8102E] !text-white",
+  customer_admin: "!bg-blue-600 !text-white",
+  customer_user: "!bg-emerald-600 !text-white",
+  field_user: "!bg-gray-700 !text-white",
+  oem_partner: "!bg-purple-600 !text-white",
+  g4s_admin: "!bg-[#C8102E] !text-white",
 };
 
 /** Internal G4S roles get dark (black) theme; external roles get light (white) theme */
