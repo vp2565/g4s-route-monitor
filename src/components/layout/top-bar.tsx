@@ -75,8 +75,9 @@ export function TopBar() {
 
         {/* Role badge */}
         <Badge
+          variant="outline"
           className={cn(
-            "text-xs font-medium",
+            "text-xs font-medium border-none",
             ROLE_COLORS[user.role]
           )}
         >

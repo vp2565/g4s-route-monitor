@@ -67,8 +67,9 @@ export default function LoginPage() {
                       {demoUser.name}
                     </h3>
                     <Badge
+                      variant="outline"
                       className={cn(
-                        "mt-1.5 text-[10px] font-medium",
+                        "mt-1.5 text-[10px] font-medium border-none",
                         ROLE_COLORS[demoUser.role]
                       )}
                     >
