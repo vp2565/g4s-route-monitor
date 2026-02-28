@@ -1,101 +1,95 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/auth-context";
+import { DEMO_USERS, ROLE_COLORS, DemoUser } from "@/types";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { PrototypeBanner } from "@/components/layout/prototype-banner";
+import { Shield, AlertTriangle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useEffect } from "react";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const { login, user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/map");
+    }
+  }, [user, router]);
+
+  const handleLogin = (demoUser: DemoUser) => {
+    login(demoUser);
+    router.push("/map");
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-black flex flex-col">
+      <PrototypeBanner />
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Shield className="h-10 w-10 text-g4s-red" />
+            <h1 className="text-3xl font-bold text-white tracking-tight">
+              G<span className="text-g4s-red">4</span>S{" "}
+              <span className="text-gray-400 font-normal">Telematix</span>
+            </h1>
+          </div>
+          <p className="text-gray-400 text-lg">
+            Route Monitoring Platform
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            Select a demo user to explore the platform
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* User Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl w-full">
+          {DEMO_USERS.map((demoUser) => (
+            <Card
+              key={demoUser.id}
+              onClick={() => handleLogin(demoUser)}
+              className="cursor-pointer bg-gray-950 border-gray-800 hover:border-g4s-red/50 hover:bg-gray-900 transition-all duration-200 group"
+            >
+              <CardContent className="p-5">
+                <div className="flex items-start gap-4">
+                  <Avatar className="h-12 w-12 shrink-0">
+                    <AvatarFallback className="bg-gray-800 text-gray-200 text-sm font-semibold group-hover:bg-g4s-red/20 group-hover:text-g4s-red transition-colors">
+                      {demoUser.avatarInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-white font-semibold text-sm truncate">
+                      {demoUser.name}
+                    </h3>
+                    <Badge
+                      className={cn(
+                        "mt-1.5 text-[10px] font-medium",
+                        ROLE_COLORS[demoUser.role]
+                      )}
+                    >
+                      {demoUser.roleLabel}
+                    </Badge>
+                    <p className="text-gray-500 text-xs mt-2 truncate">
+                      {demoUser.customer}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="mt-10 flex items-center gap-2 text-gray-600 text-xs">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>This is a prototype with simulated data. No real credentials required.</span>
+        </div>
+      </div>
     </div>
   );
 }
