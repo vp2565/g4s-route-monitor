@@ -1,0 +1,113 @@
+// ============================================================
+// GPS Breadcrumb Simulation
+// Generates a "traveled" path along the planned route up to
+// progressPercent, with deterministic GPS jitter.
+// ============================================================
+
+/** Haversine distance between two [lat,lng] points in metres */
+function haversine(a: [number, number], b: [number, number]): number {
+  const R = 6_371_000; // Earth radius in metres
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(b[0] - a[0]);
+  const dLng = toRad(b[1] - a[1]);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/** Seeded LCG pseudo-random (deterministic per seed) */
+function seededRandom(seed: number): () => number {
+  let s = seed | 0 || 1;
+  return () => {
+    s = (s * 1_664_525 + 1_013_904_223) & 0x7fffffff;
+    return s / 0x7fffffff;
+  };
+}
+
+/** Box-Muller gaussian from uniform pair */
+function gaussian(u1: number, u2: number): number {
+  return Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
+}
+
+/** Interpolate between two [lat,lng] points at fraction t */
+function lerp(
+  a: [number, number],
+  b: [number, number],
+  t: number
+): [number, number] {
+  return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+}
+
+export interface BreadcrumbResult {
+  /** The original planned path, trimmed to the traveled portion */
+  plannedPath: [number, number][];
+  /** The "actual" path with GPS jitter applied */
+  actualPath: [number, number][];
+}
+
+/**
+ * Generate simulated GPS breadcrumbs along a planned route.
+ *
+ * @param plannedPath Array of [lat, lng] positions forming the full route
+ * @param progressPercent 0–100 indicating how far along the shipment has traveled
+ * @param jitterMetres Standard deviation of GPS noise in metres (~300m default)
+ * @param seed Seed for deterministic noise (shipment hash)
+ */
+export function generateBreadcrumbs(
+  plannedPath: [number, number][],
+  progressPercent: number,
+  jitterMetres: number = 300,
+  seed: number = 42
+): BreadcrumbResult {
+  if (plannedPath.length < 2 || progressPercent <= 0) {
+    return { plannedPath: [], actualPath: [] };
+  }
+
+  // 1. Compute cumulative distances along the path
+  const cumulDist: number[] = [0];
+  for (let i = 1; i < plannedPath.length; i++) {
+    cumulDist.push(cumulDist[i - 1] + haversine(plannedPath[i - 1], plannedPath[i]));
+  }
+  const totalDist = cumulDist[cumulDist.length - 1];
+  if (totalDist === 0) return { plannedPath: [], actualPath: [] };
+
+  // 2. Find the cut distance
+  const cutDist = totalDist * Math.min(progressPercent, 100) / 100;
+
+  // 3. Collect planned points up to the cut, + interpolated endpoint
+  const trimmedPlanned: [number, number][] = [plannedPath[0]];
+  for (let i = 1; i < plannedPath.length; i++) {
+    if (cumulDist[i] <= cutDist) {
+      trimmedPlanned.push(plannedPath[i]);
+    } else {
+      // Interpolate the final point
+      const segLen = cumulDist[i] - cumulDist[i - 1];
+      const remaining = cutDist - cumulDist[i - 1];
+      if (segLen > 0) {
+        trimmedPlanned.push(lerp(plannedPath[i - 1], plannedPath[i], remaining / segLen));
+      }
+      break;
+    }
+  }
+
+  // 4. Apply deterministic GPS jitter to produce the "actual" path
+  const rng = seededRandom(seed);
+  // Degrees per metre (approximate)
+  const degPerMetre = 1 / 111_320;
+
+  const actualPath: [number, number][] = trimmedPlanned.map((pt, idx) => {
+    if (idx === 0) return pt; // Start is exact (DDI verified)
+    const u1 = rng();
+    const u2 = rng();
+    const noiseLat = gaussian(u1, u2) * jitterMetres * degPerMetre;
+    const noiseLng =
+      gaussian(rng(), rng()) *
+      jitterMetres *
+      degPerMetre /
+      Math.cos((pt[0] * Math.PI) / 180);
+    return [pt[0] + noiseLat, pt[1] + noiseLng] as [number, number];
+  });
+
+  return { plannedPath: trimmedPlanned, actualPath };
+}
