@@ -13,10 +13,10 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+import { useSimulation } from "@/hooks/useSimulation";
 import {
   getAllShipments,
   getAllAlerts,
-  getActiveAlerts,
   getShipmentById,
   getRouteTemplateById,
   getPlaybookByAlertType,
@@ -24,6 +24,7 @@ import {
 } from "@/lib/store";
 import type { Shipment, RouteTemplate } from "@/lib/types";
 import { haversine } from "@/components/map/mapUtils";
+import { SimulationBar } from "@/components/map/SimulationBar";
 import { AlertQueue } from "./AlertQueue";
 import { PlaybookPanel } from "./PlaybookPanel";
 import { ShiftHandoverModal } from "./ShiftHandoverModal";
@@ -222,8 +223,27 @@ function createFieldUnitIcon() {
 // --- Main SOC Console ---
 
 export default function SOCConsole() {
-  const allAlerts = useMemo(() => getAllAlerts(), []);
-  const activeAlerts = useMemo(() => getActiveAlerts(), []);
+  const simulation = useSimulation();
+
+  // Merge seed alerts with simulation-generated alerts
+  const allAlerts = useMemo(() => {
+    const seed = getAllAlerts();
+    const simAlerts = simulation.simulationAlerts;
+    // Deduplicate by id
+    const seen = new Set(seed.map((a) => a.id));
+    return [...seed, ...simAlerts.filter((a) => !seen.has(a.id))];
+  }, [simulation.simulationAlerts]);
+
+  const activeAlerts = useMemo(() => {
+    return allAlerts.filter(
+      (a) =>
+        a.status === "new" ||
+        a.status === "acknowledged" ||
+        a.status === "investigating" ||
+        a.status === "dispatched"
+    );
+  }, [allAlerts]);
+
   const allShipments = useMemo(() => getAllShipments(), []);
 
   const [selectedAlertId, setSelectedAlertId] = useState<string | null>(null);
@@ -303,6 +323,13 @@ export default function SOCConsole() {
   const shipmentPositions = useMemo(() => {
     const posMap = new Map<string, [number, number]>();
     for (const s of allShipments) {
+      // Check simulation positions first
+      const simPos = simulation.positions.get(s.id);
+      if (simPos && simPos.lat !== 0) {
+        posMap.set(s.id, [simPos.lat, simPos.lng]);
+        continue;
+      }
+
       if (!s.currentPosition) continue;
       if (s.progressPercent > 0 && s.routeTemplateId) {
         const route = getRouteTemplateById(s.routeTemplateId);
@@ -319,7 +346,7 @@ export default function SOCConsole() {
     }
     return posMap;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allShipments, osrmCacheVersion]);
+  }, [allShipments, osrmCacheVersion, simulation.positions]);
 
   const mappableShipments = useMemo(
     () => allShipments.filter((s) => shipmentPositions.has(s.id)),
@@ -608,6 +635,16 @@ export default function SOCConsole() {
               Field Unit
             </div>
           </div>
+
+          <SimulationBar
+            status={simulation.status}
+            onStart={simulation.start}
+            onPause={simulation.pause}
+            onReset={simulation.reset}
+            onSetSpeed={simulation.setSpeed}
+            alertCount={simulation.simulationAlerts.length}
+            isDark={true}
+          />
         </div>
 
         {/* RIGHT: Playbook & Dispatch */}
