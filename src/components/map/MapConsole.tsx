@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -22,7 +22,7 @@ import {
   getDevicesByShipmentId,
   getAuditEntriesByEntityId,
 } from "@/lib/store";
-import type { Shipment } from "@/lib/types";
+import type { Shipment, RouteTemplate, RouteWaypoint } from "@/lib/types";
 import { MapFilterBar, type MapFilters, type GeofenceFilters } from "./MapFilterBar";
 import { MapControls } from "./MapControls";
 import { ShipmentSidePanel } from "./ShipmentSidePanel";
@@ -107,6 +107,59 @@ function generateSeaRoute(start: [number, number], end: [number, number]): [numb
   const key = getSeaLaneKey(start[0], start[1], end[0], end[1]);
   if (key && SEA_LANE_WAYPOINTS[key]) return SEA_LANE_WAYPOINTS[key];
   return greatCircleArc(start, end, 30);
+}
+
+// --- Instant fallback route from local GeoJSON data (no network) ---
+
+function buildFallbackSegments(
+  route: RouteTemplate,
+  isMultimodal: boolean,
+  wps: RouteWaypoint[]
+): RouteSegment[] {
+  if (!isMultimodal) {
+    // Single-mode: use the route template's GeoJSON coordinates
+    const positions: [number, number][] = route.coordinates.map(
+      ([lng, lat]) => [lat, lng] as [number, number]
+    );
+    return [{ positions, mode: "road" }];
+  }
+
+  // Multimodal: build sea segments from lane waypoints + straight lines for land
+  const segments: RouteSegment[] = [];
+  let i = 0;
+  let landStart = 0;
+
+  while (i < wps.length) {
+    if (wps[i].type === "port") {
+      // Land segment before this port
+      if (landStart < i) {
+        const landWps = wps.slice(landStart, i + 1);
+        segments.push({
+          positions: landWps.map((wp) => [wp.location.lat, wp.location.lng] as [number, number]),
+          mode: "road",
+        });
+      }
+      if (i + 1 < wps.length && wps[i + 1].type === "port") {
+        segments.push({
+          positions: generateSeaRoute(
+            [wps[i].location.lat, wps[i].location.lng],
+            [wps[i + 1].location.lat, wps[i + 1].location.lng]
+          ),
+          mode: "sea",
+        });
+        i += 2;
+        landStart = i - 1;
+      } else { i++; landStart = i; }
+    } else { i++; }
+  }
+  if (landStart < wps.length - 1) {
+    const landWps = wps.slice(landStart);
+    segments.push({
+      positions: landWps.map((wp) => [wp.location.lat, wp.location.lng] as [number, number]),
+      mode: "road",
+    });
+  }
+  return segments;
 }
 
 // --- Marker color logic ---
@@ -294,7 +347,9 @@ export default function MapConsole() {
   );
 
   // Route segments for selected shipment
+  // Two-phase: instant fallback from local GeoJSON, then OSRM upgrade
   const [routeSegments, setRouteSegments] = useState<RouteSegment[]>([]);
+  const osrmCacheRef = useRef<Map<string, RouteSegment[]>>(new Map());
 
   useEffect(() => {
     if (!selectedShipmentId) {
@@ -312,11 +367,23 @@ export default function MapConsole() {
       return;
     }
 
-    let cancelled = false;
+    // Check OSRM cache first — instant if previously fetched
+    const cacheKey = route.id;
+    const cached = osrmCacheRef.current.get(cacheKey);
+    if (cached) {
+      setRouteSegments(cached);
+      return;
+    }
 
+    let cancelled = false;
     const wps = route.waypoints;
     const isMultimodal = route.transportModes.length > 1;
 
+    // --- Phase 1: Instant fallback from local data (0ms) ---
+    const fallbackSegments = buildFallbackSegments(route, isMultimodal, wps);
+    setRouteSegments(fallbackSegments);
+
+    // --- Phase 2: OSRM upgrade in background ---
     if (!isMultimodal) {
       const coords = wps.map((wp) => `${wp.location.lng},${wp.location.lat}`).join(";");
       fetch(
@@ -330,54 +397,38 @@ export default function MapConsole() {
               data.routes[0].geometry.coordinates.map(
                 ([lng, lat]: [number, number]) => [lat, lng] as [number, number]
               );
-            setRouteSegments([{ positions, mode: "road" }]);
+            const osrmResult = [{ positions, mode: "road" as const }];
+            osrmCacheRef.current.set(cacheKey, osrmResult);
+            setRouteSegments(osrmResult);
           }
         })
         .catch(() => {
-          if (cancelled) return;
-          const positions: [number, number][] = route.coordinates.map(
-            ([lng, lat]) => [lat, lng] as [number, number]
-          );
-          setRouteSegments([{ positions, mode: "road" }]);
+          // Keep fallback — already displayed
         });
     } else {
+      // Multimodal: sea segments are already in fallback, only upgrade land groups
       const landGroups: { start: number; end: number }[] = [];
-      const seaSegments: { from: [number, number]; to: [number, number] }[] = [];
+      const seaSegs: RouteSegment[] = [];
       let i = 0;
       let landStart = 0;
 
       while (i < wps.length) {
         if (wps[i].type === "port") {
-          if (landStart < i) {
-            landGroups.push({ start: landStart, end: i });
-          }
+          if (landStart < i) landGroups.push({ start: landStart, end: i });
           if (i + 1 < wps.length && wps[i + 1].type === "port") {
-            seaSegments.push({
-              from: [wps[i].location.lat, wps[i].location.lng],
-              to: [wps[i + 1].location.lat, wps[i + 1].location.lng],
+            seaSegs.push({
+              positions: generateSeaRoute(
+                [wps[i].location.lat, wps[i].location.lng],
+                [wps[i + 1].location.lat, wps[i + 1].location.lng]
+              ),
+              mode: "sea",
             });
             i += 2;
             landStart = i - 1;
-          } else {
-            i++;
-            landStart = i;
-          }
-        } else {
-          i++;
-        }
+          } else { i++; landStart = i; }
+        } else { i++; }
       }
-      if (landStart < wps.length - 1) {
-        landGroups.push({ start: landStart, end: wps.length - 1 });
-      }
-
-      const segments: RouteSegment[] = [];
-
-      for (const seg of seaSegments) {
-        segments.push({
-          positions: generateSeaRoute(seg.from, seg.to),
-          mode: "sea",
-        });
-      }
+      if (landStart < wps.length - 1) landGroups.push({ start: landStart, end: wps.length - 1 });
 
       const landPromises = landGroups.map(async (group) => {
         const groupWps = wps.slice(group.start, group.end + 1);
@@ -396,29 +447,23 @@ export default function MapConsole() {
               mode: "road" as const,
             };
           }
-        } catch {
-          // ignore
-        }
+        } catch { /* keep fallback */ }
         return {
-          positions: groupWps.map(
-            (wp) => [wp.location.lat, wp.location.lng] as [number, number]
-          ),
+          positions: groupWps.map((wp) => [wp.location.lat, wp.location.lng] as [number, number]),
           mode: "road" as const,
         };
       });
 
       Promise.all(landPromises).then((landResults) => {
         if (cancelled) return;
-        for (const r of landResults) {
-          if (r) segments.push(r);
-        }
+        const segments: RouteSegment[] = [...seaSegs];
+        for (const r of landResults) { if (r) segments.push(r); }
+        osrmCacheRef.current.set(cacheKey, segments);
         setRouteSegments(segments);
       });
     }
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [selectedShipmentId, allShipments]);
 
   // Breadcrumbs: generate from ALL segments in order (road + sea + air)
@@ -677,10 +722,11 @@ export default function MapConsole() {
             {/* Risk heatmap */}
             <RiskHeatmap visible={geofenceFilters.showHeatmap} />
 
-            {/* Shipment markers */}
+            {/* Shipment markers — dim non-selected when one is active */}
             {mappableShipments.map((shipment) => {
               const color = getMarkerColor(shipment);
               const isSelected = shipment.id === selectedShipmentId;
+              const hasSel = !!selectedShipmentId;
 
               return (
                 <CircleMarker
@@ -690,8 +736,9 @@ export default function MapConsole() {
                   pathOptions={{
                     color: isSelected ? "#fff" : color,
                     fillColor: color,
-                    fillOpacity: 0.85,
-                    weight: isSelected ? 3 : 2,
+                    fillOpacity: hasSel && !isSelected ? 0.3 : 0.85,
+                    weight: isSelected ? 3 : hasSel ? 1 : 2,
+                    opacity: hasSel && !isSelected ? 0.4 : 1,
                   }}
                   eventHandlers={{
                     click: (e) => handleMarkerClick(shipment.id, e),
