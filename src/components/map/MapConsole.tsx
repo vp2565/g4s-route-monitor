@@ -109,6 +109,89 @@ function generateSeaRoute(start: [number, number], end: [number, number]): [numb
   return greatCircleArc(start, end, 30);
 }
 
+// --- Interpolate position along a path at a given percentage ---
+
+function haversineDist(a: [number, number], b: [number, number]): number {
+  const R = 6_371_000;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(b[0] - a[0]);
+  const dLng = toRad(b[1] - a[1]);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function getPositionAlongPath(
+  path: [number, number][],
+  percent: number
+): [number, number] | null {
+  if (path.length === 0) return null;
+  if (path.length === 1 || percent <= 0) return path[0];
+  if (percent >= 100) return path[path.length - 1];
+
+  const cumul: number[] = [0];
+  for (let i = 1; i < path.length; i++) {
+    cumul.push(cumul[i - 1] + haversineDist(path[i - 1], path[i]));
+  }
+  const total = cumul[cumul.length - 1];
+  if (total === 0) return path[0];
+
+  const target = total * percent / 100;
+  for (let i = 1; i < path.length; i++) {
+    if (cumul[i] >= target) {
+      const segLen = cumul[i] - cumul[i - 1];
+      const t = segLen > 0 ? (target - cumul[i - 1]) / segLen : 0;
+      return [
+        path[i - 1][0] + (path[i][0] - path[i - 1][0]) * t,
+        path[i - 1][1] + (path[i][1] - path[i - 1][1]) * t,
+      ];
+    }
+  }
+  return path[path.length - 1];
+}
+
+/** Build a full [lat,lng] path from a route template (local data, no network) */
+function buildFullPathFromRoute(route: RouteTemplate): [number, number][] {
+  const isMultimodal = route.transportModes.length > 1;
+  if (!isMultimodal) {
+    return route.coordinates.map(([lng, lat]) => [lat, lng] as [number, number]);
+  }
+
+  // Multimodal: concatenate land waypoints + sea lane waypoints in order
+  const wps = route.waypoints;
+  const fullPath: [number, number][] = [];
+  let i = 0;
+  let landStart = 0;
+
+  while (i < wps.length) {
+    if (wps[i].type === "port") {
+      // Land points before port
+      for (let j = landStart; j <= i; j++) {
+        fullPath.push([wps[j].location.lat, wps[j].location.lng]);
+      }
+      if (i + 1 < wps.length && wps[i + 1].type === "port") {
+        // Sea route between ports
+        const seaPoints = generateSeaRoute(
+          [wps[i].location.lat, wps[i].location.lng],
+          [wps[i + 1].location.lat, wps[i + 1].location.lng]
+        );
+        // Skip first (already added as port) to avoid duplication
+        for (let k = 1; k < seaPoints.length; k++) {
+          fullPath.push(seaPoints[k]);
+        }
+        i += 2;
+        landStart = i - 1;
+      } else { i++; landStart = i; }
+    } else { i++; }
+  }
+  // Remaining land points
+  for (let j = landStart; j < wps.length; j++) {
+    fullPath.push([wps[j].location.lat, wps[j].location.lng]);
+  }
+  return fullPath;
+}
+
 // --- Instant fallback route from local GeoJSON data (no network) ---
 
 function buildFallbackSegments(
@@ -310,14 +393,37 @@ export default function MapConsole() {
     });
   }, [allShipments, filters, isCustomerScoped, customerScope]);
 
+  // Compute live positions from route geometry + progressPercent
+  // This replaces the static seed data positions with accurate interpolated ones
+  const shipmentPositions = useMemo(() => {
+    const posMap = new Map<string, [number, number]>();
+    for (const s of filteredShipments) {
+      if (!s.currentPosition) continue; // no position at all
+      if (s.progressPercent > 0 && s.routeTemplateId) {
+        const route = getRouteTemplateById(s.routeTemplateId);
+        if (route) {
+          const fullPath = buildFullPathFromRoute(route);
+          const pos = getPositionAlongPath(fullPath, s.progressPercent);
+          if (pos) {
+            posMap.set(s.id, pos);
+            continue;
+          }
+        }
+      }
+      // Fallback to seed data position
+      posMap.set(s.id, [s.currentPosition.lat, s.currentPosition.lng]);
+    }
+    return posMap;
+  }, [filteredShipments]);
+
   const mappableShipments = useMemo(
-    () => filteredShipments.filter((s) => s.currentPosition),
-    [filteredShipments]
+    () => filteredShipments.filter((s) => shipmentPositions.has(s.id)),
+    [filteredShipments, shipmentPositions]
   );
 
   const allPositions: [number, number][] = useMemo(
-    () => mappableShipments.map((s) => [s.currentPosition!.lat, s.currentPosition!.lng]),
-    [mappableShipments]
+    () => mappableShipments.map((s) => shipmentPositions.get(s.id)!),
+    [mappableShipments, shipmentPositions]
   );
 
   // Selected shipment data
@@ -727,11 +833,12 @@ export default function MapConsole() {
               const color = getMarkerColor(shipment);
               const isSelected = shipment.id === selectedShipmentId;
               const hasSel = !!selectedShipmentId;
+              const pos = shipmentPositions.get(shipment.id)!;
 
               return (
                 <CircleMarker
                   key={shipment.id}
-                  center={[shipment.currentPosition!.lat, shipment.currentPosition!.lng]}
+                  center={pos}
                   radius={isSelected ? 9 : 6}
                   pathOptions={{
                     color: isSelected ? "#fff" : color,
