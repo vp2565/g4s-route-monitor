@@ -15,7 +15,6 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { useAuth } from "@/contexts/auth-context";
-import { useSimulation } from "@/hooks/useSimulation";
 import {
   getAllShipments,
   getRouteTemplateById,
@@ -26,7 +25,6 @@ import {
 import type { Shipment, RouteTemplate, RouteWaypoint } from "@/lib/types";
 import { MapFilterBar, type MapFilters, type GeofenceFilters } from "./MapFilterBar";
 import { MapControls } from "./MapControls";
-import { SimulationBar } from "./SimulationBar";
 import { ShipmentSidePanel } from "./ShipmentSidePanel";
 import { GeofenceOverlays } from "./GeofenceOverlays";
 import { RiskHeatmap } from "./RiskHeatmap";
@@ -338,9 +336,6 @@ export default function MapConsole() {
   const [zoomTrigger, setZoomTrigger] = useState(0);
   const [osrmCacheVersion, setOsrmCacheVersion] = useState(0);
 
-  // Simulation hook
-  const simulation = useSimulation();
-
   // Load all shipments
   const allShipments = useMemo(() => getAllShipments(), []);
 
@@ -381,17 +376,10 @@ export default function MapConsole() {
   }, [allShipments, filters, isCustomerScoped, customerScope]);
 
   // Compute live positions from route geometry + progressPercent
-  // Prefers simulation positions > OSRM-cached > local coords
+  // Prefers OSRM-cached path (road-snapped) when available, falls back to local coords
   const shipmentPositions = useMemo(() => {
     const posMap = new Map<string, [number, number]>();
     for (const s of filteredShipments) {
-      // Check simulation positions first (real-time SSE)
-      const simPos = simulation.positions.get(s.id);
-      if (simPos && simPos.lat !== 0) {
-        posMap.set(s.id, [simPos.lat, simPos.lng]);
-        continue;
-      }
-
       if (!s.currentPosition) continue;
       if (s.progressPercent > 0 && s.routeTemplateId) {
         const route = getRouteTemplateById(s.routeTemplateId);
@@ -412,7 +400,7 @@ export default function MapConsole() {
     }
     return posMap;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredShipments, osrmCacheVersion, simulation.positions]);
+  }, [filteredShipments, osrmCacheVersion]);
 
   const mappableShipments = useMemo(
     () => filteredShipments.filter((s) => shipmentPositions.has(s.id)),
@@ -904,16 +892,6 @@ export default function MapConsole() {
             tileLayer={tileLayer}
             onToggleLayer={handleToggleLayer}
             onZoomToFit={handleZoomToFit}
-          />
-
-          <SimulationBar
-            status={simulation.status}
-            onStart={simulation.start}
-            onPause={simulation.pause}
-            onReset={simulation.reset}
-            onSetSpeed={simulation.setSpeed}
-            alertCount={simulation.simulationAlerts.length}
-            isDark={isDarkTheme}
           />
         </div>
 
