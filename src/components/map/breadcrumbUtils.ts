@@ -175,11 +175,15 @@ export function generateBreadcrumbs(
         }
 
         // Compute perpendicular offset using neighboring points
+        // Skip if neighbors are too far apart (segment boundary, e.g. sea→road jump)
         const prev = idx > 0 ? trimmedPlanned[idx - 1] : pt;
         const next = idx < trimmedPlanned.length - 1 ? trimmedPlanned[idx + 1] : pt;
-        const offset = perpendicularOffset(prev, next, detour.offsetMetres * intensity, detour.side);
-        detourLat += offset[0];
-        detourLng += offset[1];
+        const neighborDist = haversine(prev, next);
+        if (neighborDist < 50_000) { // only offset when neighbors < 50km apart
+          const offset = perpendicularOffset(prev, next, detour.offsetMetres * intensity, detour.side);
+          detourLat += offset[0];
+          detourLng += offset[1];
+        }
       }
     }
 

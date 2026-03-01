@@ -7,6 +7,7 @@ import {
   CircleMarker,
   Polyline,
   Tooltip,
+  Marker,
   useMap,
   useMapEvents,
 } from "react-leaflet";
@@ -420,23 +421,21 @@ export default function MapConsole() {
     };
   }, [selectedShipmentId, allShipments]);
 
-  // Breadcrumbs: generate from road segments + progress
+  // Breadcrumbs: generate from ALL segments in order (road + sea + air)
+  // so that progress % maps correctly across the full multimodal journey
   const breadcrumbResult = useMemo(() => {
     if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
+    if (routeSegments.length === 0) return null;
 
-    // Use road segments only for breadcrumbs
-    const roadSegments = routeSegments.filter((s) => s.mode === "road");
-    if (roadSegments.length === 0) return null;
-
-    // Concatenate all road segment positions into one path
-    const fullRoadPath: [number, number][] = [];
-    for (const seg of roadSegments) {
+    // Concatenate all segment positions into one continuous path
+    const fullPath: [number, number][] = [];
+    for (const seg of routeSegments) {
       for (const pos of seg.positions) {
-        fullRoadPath.push(pos);
+        fullPath.push(pos);
       }
     }
 
-    if (fullRoadPath.length < 2) return null;
+    if (fullPath.length < 2) return null;
 
     // Hash shipment ID for seed
     let seed = 0;
@@ -444,7 +443,7 @@ export default function MapConsole() {
       seed = ((seed << 5) - seed + selectedShipment.id.charCodeAt(i)) | 0;
     }
 
-    return generateBreadcrumbs(fullRoadPath, selectedShipment.progressPercent, Math.abs(seed));
+    return generateBreadcrumbs(fullPath, selectedShipment.progressPercent, Math.abs(seed));
   }, [selectedShipment, routeSegments]);
 
   // Deviations from breadcrumbs
@@ -567,6 +566,52 @@ export default function MapConsole() {
               />
             ))}
 
+            {/* Origin & Destination markers for selected shipment */}
+            {selectedRoute && (() => {
+              const origin = selectedRoute.waypoints.find(wp => wp.type === "origin");
+              const dest = selectedRoute.waypoints.find(wp => wp.type === "destination");
+              return (
+                <>
+                  {origin && (
+                    <Marker
+                      position={[origin.location.lat, origin.location.lng]}
+                      icon={L.divIcon({
+                        className: "",
+                        html: `<div style="width:24px;height:24px;border-radius:50%;background:#3B82F6;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:system-ui;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.4)">A</div>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12],
+                      })}
+                    >
+                      <Tooltip direction="top" offset={[0, -14]}>
+                        <div style={{ fontFamily: "system-ui", fontSize: 12 }}>
+                          <div style={{ fontWeight: 600 }}>{origin.name}</div>
+                          <div style={{ color: "#6B7280", fontSize: 11 }}>Origin</div>
+                        </div>
+                      </Tooltip>
+                    </Marker>
+                  )}
+                  {dest && (
+                    <Marker
+                      position={[dest.location.lat, dest.location.lng]}
+                      icon={L.divIcon({
+                        className: "",
+                        html: `<div style="width:24px;height:24px;border-radius:50%;background:#EF4444;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:system-ui;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.4)">B</div>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12],
+                      })}
+                    >
+                      <Tooltip direction="top" offset={[0, -14]}>
+                        <div style={{ fontFamily: "system-ui", fontSize: 12 }}>
+                          <div style={{ fontWeight: 600 }}>{dest.name}</div>
+                          <div style={{ color: "#6B7280", fontSize: 11 }}>Destination</div>
+                        </div>
+                      </Tooltip>
+                    </Marker>
+                  )}
+                </>
+              );
+            })()}
+
             {/* Breadcrumb: actual path (solid green) */}
             {breadcrumbResult && breadcrumbResult.actualPath.length > 1 && (
               <Polyline
@@ -577,6 +622,26 @@ export default function MapConsole() {
                   opacity: 0.85,
                 }}
               />
+            )}
+
+            {/* Current position marker — at the tip of the actual path */}
+            {breadcrumbResult && breadcrumbResult.actualPath.length > 0 && (
+              <CircleMarker
+                center={breadcrumbResult.actualPath[breadcrumbResult.actualPath.length - 1]}
+                radius={8}
+                pathOptions={{
+                  color: "#fff",
+                  fillColor: "#22C55E",
+                  fillOpacity: 1,
+                  weight: 3,
+                }}
+              >
+                <Tooltip direction="top" offset={[0, -10]}>
+                  <div style={{ fontFamily: "system-ui", fontSize: 12, fontWeight: 600 }}>
+                    Current Position
+                  </div>
+                </Tooltip>
+              </CircleMarker>
             )}
 
             {/* Deviation markers */}
