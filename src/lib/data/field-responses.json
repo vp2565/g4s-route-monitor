@@ -1,0 +1,46 @@
+[
+  {
+    "id": "fr-001",
+    "alertId": "alrt-001",
+    "shipmentId": "G4S-SHP-2026-0001",
+    "status": "en_route",
+    "dispatchedUnit": "G4S Patrol Unit Alpha-7",
+    "unitCallsign": "ALPHA-7",
+    "dispatchedAt": "2026-02-28T06:25:00Z",
+    "enRouteAt": "2026-02-28T06:30:00Z",
+    "arrivedAt": null,
+    "resolvedAt": null,
+    "currentPosition": { "lat": 44.79, "lng": 20.48 },
+    "etaMinutes": 12,
+    "findings": "",
+    "evidence": [],
+    "outcome": "",
+    "lawEnforcementInvolved": false,
+    "lawEnforcementRef": null,
+    "notes": "Unit dispatched from Belgrade station. ETA 12 minutes to last known vehicle position."
+  },
+  {
+    "id": "fr-002",
+    "alertId": "alrt-016",
+    "shipmentId": "G4S-SHP-2026-0017",
+    "status": "resolved",
+    "dispatchedUnit": "G4S Patrol Unit Theta-3",
+    "unitCallsign": "THETA-3",
+    "dispatchedAt": "2026-02-24T07:35:00Z",
+    "enRouteAt": "2026-02-24T07:38:00Z",
+    "arrivedAt": "2026-02-24T07:42:00Z",
+    "resolvedAt": "2026-02-24T07:45:00Z",
+    "currentPosition": null,
+    "etaMinutes": null,
+    "findings": "Vehicle located at approved fuel stop. Driver was checking tire pressure using toolbox mounted adjacent to cargo lock. Smart lock sensor triggered by vibration, not tampering. All seals intact. Cargo compartment secure.",
+    "evidence": [
+      { "type": "photo", "url": "/evidence/fr-002-seal-intact.jpg", "description": "Seal G4S-SL-17171 intact on cargo door", "capturedAt": "2026-02-24T07:43:00Z" },
+      { "type": "photo", "url": "/evidence/fr-002-toolbox.jpg", "description": "Toolbox compartment adjacent to cargo lock — source of vibration trigger", "capturedAt": "2026-02-24T07:43:30Z" },
+      { "type": "note", "url": "", "description": "Driver cooperated fully. Confirmed using tire pressure gauge from toolbox. No signs of tampering or unauthorized access.", "capturedAt": "2026-02-24T07:44:00Z" }
+    ],
+    "outcome": "False alarm confirmed. Sensor triggered by adjacent toolbox vibration. No security breach. Recommend adjusting smart lock sensitivity threshold for this mounting configuration.",
+    "lawEnforcementInvolved": false,
+    "lawEnforcementRef": null,
+    "notes": "Quick resolution. Unit was nearby at Thessaloniki station."
+  }
+]

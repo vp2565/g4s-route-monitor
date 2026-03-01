@@ -1,0 +1,50 @@
+[
+  {
+    "id": "cust-001",
+    "name": "British American Tobacco",
+    "shortCode": "BAT",
+    "tier": "enterprise",
+    "parentId": null,
+    "industry": "Tobacco & FMCG",
+    "country": "United Kingdom",
+    "contractStart": "2024-01-15",
+    "contractEnd": "2027-01-14",
+    "primaryContact": "Sarah Mitchell",
+    "primaryEmail": "s.mitchell@bat.com",
+    "logo": "/logos/bat.svg",
+    "activeShipments": 8,
+    "totalDevices": 18
+  },
+  {
+    "id": "cust-002",
+    "name": "PharmaCo Europe",
+    "shortCode": "PCE",
+    "tier": "enterprise",
+    "parentId": null,
+    "industry": "Pharmaceuticals",
+    "country": "France",
+    "contractStart": "2024-06-01",
+    "contractEnd": "2027-05-31",
+    "primaryContact": "Jean-Pierre Moreau",
+    "primaryEmail": "jp.moreau@pharmaco.eu",
+    "logo": "/logos/pharmaco.svg",
+    "activeShipments": 10,
+    "totalDevices": 15
+  },
+  {
+    "id": "cust-003",
+    "name": "TechElectronics GmbH",
+    "shortCode": "TEG",
+    "tier": "standard",
+    "parentId": null,
+    "industry": "Consumer Electronics",
+    "country": "Germany",
+    "contractStart": "2025-03-01",
+    "contractEnd": "2028-02-28",
+    "primaryContact": "Klaus Weber",
+    "primaryEmail": "k.weber@techelectronics.de",
+    "logo": "/logos/techelectronics.svg",
+    "activeShipments": 7,
+    "totalDevices": 12
+  }
+]

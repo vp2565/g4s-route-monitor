@@ -102,6 +102,7 @@ This file is updated after each session to track progress. See below.
 
 ### Completed Sessions
 - **Session 1: Project Scaffolding** — Next.js 14 (App Router) + Tailwind CSS + shadcn/ui. AuthContext with role switching, dark sidebar (collapsible, Lucide icons), top bar with search/notifications/role-switcher dropdown, G4S-red prototype banner, login page with 6 demo user cards. Placeholder pages for all routes. G4S corporate branding (#C8102E red, black, white). Dark theme (black) for internal roles (SOC, Field, G4S Admin); light theme (white) for external roles (Customer Admin, Dispatcher, OEM Partner).
+- **Session 2: Data Layer & Seed Data** — Complete typed data layer with 13 entity interfaces (src/lib/types.ts, 452 lines). 12 JSON seed data files in src/lib/data/: 3 customers, 6 users, 8 route templates (real European GeoJSON coordinates), 25 shipments (5 planned, 12 active, 5 completed, 3 with alerts), 28 segments (multimodal support), 45 devices (4 vendors, 4 types, varying battery/status), 20 alerts (all severity levels and lifecycle states), 3 SOC playbooks (Theft/Deviation 6 steps, Cold Chain 5 steps, Signal Loss 4 steps), 2 field responses, 5 risk assessments, 5 condition data records (time-series temp/humidity with breach events), 55 audit entries. Typed data store (src/lib/store.ts) with 30+ accessor functions. Build passes clean.
 
 ## Important Reminders
 

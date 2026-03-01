@@ -1,0 +1,375 @@
+[
+  {
+    "id": "route-001",
+    "name": "Athens - Rotterdam (Multimodal)",
+    "origin": "Athens, Greece",
+    "destination": "Rotterdam, Netherlands",
+    "distanceKm": 3200,
+    "estimatedDurationHours": 72,
+    "transportModes": ["road", "sea", "road"],
+    "coordinates": [
+      [23.7275, 37.9838], [23.6300, 38.0400], [23.5500, 38.1000],
+      [23.3200, 38.3200], [23.0000, 38.5000], [22.7500, 38.7000],
+      [22.4300, 38.9000], [22.3500, 39.0900], [22.4200, 39.3600],
+      [22.5000, 39.6000], [22.8500, 39.8000], [22.9300, 40.0000],
+      [22.9400, 40.6400], [23.3200, 40.6600], [24.0000, 40.7500],
+      [24.4100, 40.9400], [26.1400, 40.8500], [26.5500, 40.8500],
+      [27.1000, 40.9000], [29.0000, 41.0000], [29.0100, 41.0100],
+      [27.5000, 40.3000], [25.0000, 39.5000], [21.5000, 38.5000],
+      [18.5000, 37.5000], [16.0000, 37.0000], [12.5000, 37.5000],
+      [9.5000, 38.5000], [5.0000, 39.0000], [2.0000, 40.0000],
+      [-1.0000, 42.0000], [-1.5000, 44.0000], [0.5000, 46.0000],
+      [2.0000, 48.0000], [3.0000, 49.5000], [3.5000, 50.5000],
+      [4.0000, 51.0000], [4.3000, 51.5000], [4.4000, 51.8000],
+      [4.4700, 51.9200]
+    ],
+    "waypoints": [
+      { "name": "Athens Distribution Center", "location": { "lat": 37.9838, "lng": 23.7275 }, "type": "origin" },
+      { "name": "Thessaloniki Hub", "location": { "lat": 40.6401, "lng": 22.9444 }, "type": "checkpoint" },
+      { "name": "Piraeus Port", "location": { "lat": 37.9475, "lng": 23.6370 }, "type": "port" },
+      { "name": "Rotterdam Europoort", "location": { "lat": 51.9550, "lng": 4.1210 }, "type": "port" },
+      { "name": "Rotterdam Warehouse", "location": { "lat": 51.9244, "lng": 4.4777 }, "type": "destination" }
+    ],
+    "noGoZones": [
+      {
+        "id": "ngz-001",
+        "name": "North Macedonia Border Area",
+        "reason": "High theft risk at border crossing parking areas",
+        "polygon": [
+          { "lat": 41.00, "lng": 22.50 }, { "lat": 41.00, "lng": 23.00 },
+          { "lat": 41.20, "lng": 23.00 }, { "lat": 41.20, "lng": 22.50 }
+        ]
+      }
+    ],
+    "safeParking": [
+      {
+        "id": "sp-001", "name": "Thessaloniki Secure Lot", "location": { "lat": 40.6200, "lng": 22.9600 },
+        "capacity": 40, "security": "guarded", "facilities": ["CCTV", "Lighting", "Restrooms", "Fuel"]
+      },
+      {
+        "id": "sp-002", "name": "Piraeus Port Holding Area", "location": { "lat": 37.9400, "lng": 23.6200 },
+        "capacity": 80, "security": "guarded", "facilities": ["CCTV", "Lighting", "Customs Office"]
+      }
+    ],
+    "riskScore": 68,
+    "riskLevel": "high",
+    "countryTransits": ["Greece", "Mediterranean Sea", "Netherlands"],
+    "lastUpdated": "2026-02-15"
+  },
+  {
+    "id": "route-002",
+    "name": "Sofia - Hamburg (Road)",
+    "origin": "Sofia, Bulgaria",
+    "destination": "Hamburg, Germany",
+    "distanceKm": 1950,
+    "estimatedDurationHours": 26,
+    "transportModes": ["road"],
+    "coordinates": [
+      [23.3219, 42.6977], [23.1000, 42.7500], [22.7500, 42.8000],
+      [22.4300, 42.7000], [22.0000, 43.0000], [21.3000, 43.3200],
+      [20.9000, 43.7300], [20.4600, 44.0100], [20.2500, 44.3500],
+      [20.4500, 44.8200], [20.3200, 45.2500], [19.8400, 45.2500],
+      [18.7000, 45.5600], [17.8000, 45.7500], [16.5000, 46.0500],
+      [15.9800, 46.3100], [15.4400, 47.0700], [14.5000, 47.5000],
+      [13.7800, 47.8000], [13.0400, 47.8100], [12.5600, 48.1500],
+      [12.1000, 48.7800], [11.5800, 48.1400], [11.4000, 48.7700],
+      [11.0800, 49.4500], [10.8900, 49.8800], [10.2000, 50.3500],
+      [10.6900, 50.8800], [10.4500, 51.2000], [10.0000, 51.5000],
+      [9.9900, 51.9500], [9.9500, 52.3700], [9.9900, 53.0000],
+      [10.0000, 53.5500]
+    ],
+    "waypoints": [
+      { "name": "Sofia Logistics Park", "location": { "lat": 42.6977, "lng": 23.3219 }, "type": "origin" },
+      { "name": "Belgrade Checkpoint", "location": { "lat": 44.8200, "lng": 20.4500 }, "type": "checkpoint" },
+      { "name": "Budapest Transit Hub", "location": { "lat": 47.4979, "lng": 19.0402 }, "type": "waypoint" },
+      { "name": "Prague Rest Stop", "location": { "lat": 50.0755, "lng": 14.4378 }, "type": "waypoint" },
+      { "name": "Hamburg Distribution Center", "location": { "lat": 53.5511, "lng": 9.9937 }, "type": "destination" }
+    ],
+    "noGoZones": [
+      {
+        "id": "ngz-002",
+        "name": "Serbian A1 Corridor Rest Stops",
+        "reason": "Multiple cargo theft incidents reported 2025 Q3-Q4",
+        "polygon": [
+          { "lat": 43.50, "lng": 21.20 }, { "lat": 43.50, "lng": 21.50 },
+          { "lat": 43.80, "lng": 21.50 }, { "lat": 43.80, "lng": 21.20 }
+        ]
+      }
+    ],
+    "safeParking": [
+      {
+        "id": "sp-003", "name": "Belgrade Secure Transit Yard", "location": { "lat": 44.8000, "lng": 20.4800 },
+        "capacity": 50, "security": "guarded", "facilities": ["CCTV", "Armed Guards", "Restrooms", "Shower"]
+      },
+      {
+        "id": "sp-004", "name": "Dresden Autohof", "location": { "lat": 51.0504, "lng": 13.7373 },
+        "capacity": 60, "security": "fenced", "facilities": ["CCTV", "Lighting", "Restaurant", "Fuel"]
+      }
+    ],
+    "riskScore": 72,
+    "riskLevel": "high",
+    "countryTransits": ["Bulgaria", "Serbia", "Hungary", "Austria", "Czech Republic", "Germany"],
+    "lastUpdated": "2026-02-10"
+  },
+  {
+    "id": "route-003",
+    "name": "Lyon - Milan (Road)",
+    "origin": "Lyon, France",
+    "destination": "Milan, Italy",
+    "distanceKm": 650,
+    "estimatedDurationHours": 8,
+    "transportModes": ["road"],
+    "coordinates": [
+      [4.8357, 45.7640], [5.0000, 45.6500], [5.2000, 45.5500],
+      [5.5000, 45.4500], [5.7200, 45.1800], [5.9300, 45.0500],
+      [6.1500, 45.0500], [6.4000, 45.0700], [6.6300, 45.0600],
+      [6.8600, 45.1700], [7.0000, 45.0700], [7.1200, 45.1000],
+      [7.3000, 45.1500], [7.6300, 45.0700], [7.6800, 45.0700],
+      [7.8000, 45.1000], [8.0000, 45.2000], [8.2500, 45.3000],
+      [8.5000, 45.3500], [8.7300, 45.4000], [8.9500, 45.4300],
+      [9.1000, 45.4500], [9.1900, 45.4600]
+    ],
+    "waypoints": [
+      { "name": "Lyon Pharma Warehouse", "location": { "lat": 45.7640, "lng": 4.8357 }, "type": "origin" },
+      { "name": "Chambéry Rest Point", "location": { "lat": 45.5646, "lng": 5.9178 }, "type": "waypoint" },
+      { "name": "Fréjus Tunnel Entry", "location": { "lat": 45.1416, "lng": 6.6750 }, "type": "checkpoint" },
+      { "name": "Turin Checkpoint", "location": { "lat": 45.0703, "lng": 7.6869 }, "type": "checkpoint" },
+      { "name": "Milan Pharma Hub", "location": { "lat": 45.4642, "lng": 9.1900 }, "type": "destination" }
+    ],
+    "noGoZones": [],
+    "safeParking": [
+      {
+        "id": "sp-005", "name": "Chambéry Secure Parking", "location": { "lat": 45.5646, "lng": 5.9178 },
+        "capacity": 25, "security": "fenced", "facilities": ["CCTV", "Lighting", "Cold Storage"]
+      }
+    ],
+    "riskScore": 35,
+    "riskLevel": "medium",
+    "countryTransits": ["France", "Italy"],
+    "lastUpdated": "2026-01-28"
+  },
+  {
+    "id": "route-004",
+    "name": "Athens - Sofia (Road)",
+    "origin": "Athens, Greece",
+    "destination": "Sofia, Bulgaria",
+    "distanceKm": 780,
+    "estimatedDurationHours": 10,
+    "transportModes": ["road"],
+    "coordinates": [
+      [23.7275, 37.9838], [23.7000, 38.0500], [23.6000, 38.2000],
+      [23.4000, 38.4500], [23.0000, 38.7500], [22.7500, 39.0000],
+      [22.4200, 39.3600], [22.4500, 39.6400], [22.7500, 39.8500],
+      [22.9400, 40.0000], [22.9400, 40.3000], [22.9444, 40.6401],
+      [23.0000, 40.8000], [23.2500, 40.9500], [23.5000, 41.0000],
+      [23.5500, 41.1000], [23.6000, 41.2000], [23.5000, 41.4000],
+      [23.3500, 41.6000], [23.3000, 41.8500], [23.2500, 42.0000],
+      [23.2000, 42.2500], [23.2000, 42.4500], [23.2500, 42.6000],
+      [23.3219, 42.6977]
+    ],
+    "waypoints": [
+      { "name": "Athens Warehouse", "location": { "lat": 37.9838, "lng": 23.7275 }, "type": "origin" },
+      { "name": "Lamia Fuel Stop", "location": { "lat": 38.9000, "lng": 22.4300 }, "type": "waypoint" },
+      { "name": "Thessaloniki Hub", "location": { "lat": 40.6401, "lng": 22.9444 }, "type": "checkpoint" },
+      { "name": "Kulata Border Crossing", "location": { "lat": 41.3700, "lng": 23.3700 }, "type": "checkpoint" },
+      { "name": "Sofia Distribution Center", "location": { "lat": 42.6977, "lng": 23.3219 }, "type": "destination" }
+    ],
+    "noGoZones": [
+      {
+        "id": "ngz-003",
+        "name": "Kulata-Blagoevgrad Corridor",
+        "reason": "Nighttime theft risk on E85 between border and Blagoevgrad",
+        "polygon": [
+          { "lat": 41.35, "lng": 23.20 }, { "lat": 41.35, "lng": 23.55 },
+          { "lat": 41.80, "lng": 23.55 }, { "lat": 41.80, "lng": 23.20 }
+        ]
+      }
+    ],
+    "safeParking": [
+      {
+        "id": "sp-006", "name": "Thessaloniki North Yard", "location": { "lat": 40.6700, "lng": 22.9500 },
+        "capacity": 35, "security": "guarded", "facilities": ["CCTV", "Lighting", "Fuel", "Restrooms"]
+      }
+    ],
+    "riskScore": 55,
+    "riskLevel": "medium",
+    "countryTransits": ["Greece", "Bulgaria"],
+    "lastUpdated": "2026-02-05"
+  },
+  {
+    "id": "route-005",
+    "name": "Rotterdam - Warsaw (Road)",
+    "origin": "Rotterdam, Netherlands",
+    "destination": "Warsaw, Poland",
+    "distanceKm": 1300,
+    "estimatedDurationHours": 16,
+    "transportModes": ["road"],
+    "coordinates": [
+      [4.4777, 51.9244], [4.6000, 51.9000], [5.0000, 51.8500],
+      [5.4700, 51.4400], [5.8700, 51.0500], [6.0800, 50.7800],
+      [6.5000, 50.7000], [6.9600, 50.9400], [7.4600, 51.0500],
+      [7.6300, 51.4800], [8.3000, 51.5000], [8.7500, 51.7200],
+      [9.5000, 51.9500], [9.9900, 52.0000], [10.5000, 52.1000],
+      [11.0000, 52.2300], [11.6300, 52.1200], [12.0000, 52.2000],
+      [12.5000, 52.3000], [13.0000, 52.4000], [13.4000, 52.5200],
+      [14.0000, 52.3500], [14.5500, 52.3500], [15.0000, 52.2000],
+      [15.5000, 52.1000], [16.0000, 52.0000], [16.9000, 52.1000],
+      [17.5000, 52.0500], [18.0000, 52.0500], [18.5000, 52.0500],
+      [19.0000, 52.1000], [19.5000, 52.1500], [20.0000, 52.2000],
+      [21.0000, 52.2300]
+    ],
+    "waypoints": [
+      { "name": "Rotterdam Europoort Depot", "location": { "lat": 51.9244, "lng": 4.4777 }, "type": "origin" },
+      { "name": "Duisburg Hub", "location": { "lat": 51.4344, "lng": 6.7624 }, "type": "waypoint" },
+      { "name": "Hanover Rest Stop", "location": { "lat": 52.3759, "lng": 9.7320 }, "type": "waypoint" },
+      { "name": "Berlin Checkpoint", "location": { "lat": 52.5200, "lng": 13.4050 }, "type": "checkpoint" },
+      { "name": "Warsaw Central Warehouse", "location": { "lat": 52.2297, "lng": 21.0122 }, "type": "destination" }
+    ],
+    "noGoZones": [],
+    "safeParking": [
+      {
+        "id": "sp-007", "name": "Duisburg Logport Parking", "location": { "lat": 51.4500, "lng": 6.7400 },
+        "capacity": 100, "security": "fenced", "facilities": ["CCTV", "Lighting", "Restaurant", "Fuel", "Shower"]
+      },
+      {
+        "id": "sp-008", "name": "Poznan Truck Stop", "location": { "lat": 52.4064, "lng": 16.9252 },
+        "capacity": 45, "security": "fenced", "facilities": ["CCTV", "Lighting", "Fuel"]
+      }
+    ],
+    "riskScore": 42,
+    "riskLevel": "medium",
+    "countryTransits": ["Netherlands", "Germany", "Poland"],
+    "lastUpdated": "2026-02-12"
+  },
+  {
+    "id": "route-006",
+    "name": "Barcelona - Lisbon (Road)",
+    "origin": "Barcelona, Spain",
+    "destination": "Lisbon, Portugal",
+    "distanceKm": 1250,
+    "estimatedDurationHours": 14,
+    "transportModes": ["road"],
+    "coordinates": [
+      [2.1734, 41.3851], [1.8000, 41.3500], [1.2000, 41.3000],
+      [0.6000, 41.2000], [0.0000, 41.0000], [-0.5000, 40.8000],
+      [-0.9000, 40.5000], [-1.5000, 40.3000], [-2.0000, 40.0000],
+      [-2.5000, 39.7000], [-3.0000, 39.5000], [-3.5000, 39.4000],
+      [-3.7000, 39.4700], [-4.0000, 39.3500], [-4.5000, 39.2000],
+      [-5.0000, 39.0000], [-5.5000, 38.9000], [-6.0000, 38.8000],
+      [-6.5000, 38.7000], [-7.0000, 38.7500], [-7.5000, 38.8000],
+      [-8.0000, 38.8500], [-8.5000, 38.9000], [-8.8000, 38.8500],
+      [-9.1000, 38.7500], [-9.1393, 38.7223]
+    ],
+    "waypoints": [
+      { "name": "Barcelona Logistics Center", "location": { "lat": 41.3851, "lng": 2.1734 }, "type": "origin" },
+      { "name": "Zaragoza Stop", "location": { "lat": 41.6488, "lng": -0.8891 }, "type": "waypoint" },
+      { "name": "Madrid Transit Hub", "location": { "lat": 40.4168, "lng": -3.7038 }, "type": "checkpoint" },
+      { "name": "Badajoz Border", "location": { "lat": 38.8794, "lng": -6.9706 }, "type": "checkpoint" },
+      { "name": "Lisbon Distribution Center", "location": { "lat": 38.7223, "lng": -9.1393 }, "type": "destination" }
+    ],
+    "noGoZones": [],
+    "safeParking": [
+      {
+        "id": "sp-009", "name": "Madrid Secure Truck Park", "location": { "lat": 40.4500, "lng": -3.6500 },
+        "capacity": 70, "security": "guarded", "facilities": ["CCTV", "Armed Guards", "Fuel", "Restaurant"]
+      }
+    ],
+    "riskScore": 28,
+    "riskLevel": "low",
+    "countryTransits": ["Spain", "Portugal"],
+    "lastUpdated": "2026-01-20"
+  },
+  {
+    "id": "route-007",
+    "name": "Hamburg - Stockholm (Multimodal)",
+    "origin": "Hamburg, Germany",
+    "destination": "Stockholm, Sweden",
+    "distanceKm": 1100,
+    "estimatedDurationHours": 28,
+    "transportModes": ["road", "sea", "road"],
+    "coordinates": [
+      [10.0000, 53.5511], [10.1500, 53.6500], [10.4000, 53.8000],
+      [10.6500, 54.0000], [10.8800, 54.1800], [10.8900, 54.3200],
+      [10.7000, 54.4000], [10.5000, 54.5000], [10.3500, 54.6000],
+      [10.5000, 54.7500], [11.0000, 54.6000], [11.5000, 54.5500],
+      [12.1300, 54.5600], [12.5000, 54.7000], [13.0000, 55.0000],
+      [13.0000, 55.4000], [12.7000, 55.6000], [12.6000, 55.6800],
+      [13.0000, 55.6000], [13.5000, 55.7000], [14.0000, 56.0000],
+      [14.5000, 56.3000], [15.0000, 56.5000], [15.5000, 56.8000],
+      [16.0000, 57.2000], [16.3000, 57.8000], [16.5000, 58.4000],
+      [16.5000, 59.0000], [16.8000, 59.3000], [17.5000, 59.5000],
+      [18.0000, 59.3300], [18.0686, 59.3293]
+    ],
+    "waypoints": [
+      { "name": "Hamburg Port Terminal", "location": { "lat": 53.5511, "lng": 10.0000 }, "type": "origin" },
+      { "name": "Lübeck Ferry Terminal", "location": { "lat": 53.8700, "lng": 10.6870 }, "type": "port" },
+      { "name": "Trelleborg Port", "location": { "lat": 55.3750, "lng": 13.1575 }, "type": "port" },
+      { "name": "Norrköping Checkpoint", "location": { "lat": 58.5942, "lng": 16.1826 }, "type": "checkpoint" },
+      { "name": "Stockholm Warehouse", "location": { "lat": 59.3293, "lng": 18.0686 }, "type": "destination" }
+    ],
+    "noGoZones": [],
+    "safeParking": [
+      {
+        "id": "sp-010", "name": "Lübeck Port Holding", "location": { "lat": 53.8700, "lng": 10.6900 },
+        "capacity": 30, "security": "guarded", "facilities": ["CCTV", "Port Security", "Customs"]
+      }
+    ],
+    "riskScore": 22,
+    "riskLevel": "low",
+    "countryTransits": ["Germany", "Baltic Sea", "Sweden"],
+    "lastUpdated": "2026-02-08"
+  },
+  {
+    "id": "route-008",
+    "name": "Munich - Prague - Warsaw (Road)",
+    "origin": "Munich, Germany",
+    "destination": "Warsaw, Poland",
+    "distanceKm": 1050,
+    "estimatedDurationHours": 12,
+    "transportModes": ["road"],
+    "coordinates": [
+      [11.5820, 48.1351], [11.7000, 48.2000], [11.9000, 48.4000],
+      [12.1000, 48.6000], [12.3000, 48.8000], [12.5500, 49.0000],
+      [12.8000, 49.2500], [13.0500, 49.4500], [13.3800, 49.5500],
+      [13.7000, 49.7000], [14.0000, 49.8500], [14.2000, 50.0000],
+      [14.4378, 50.0755], [14.5000, 50.1000], [14.8000, 50.2000],
+      [15.2000, 50.3000], [15.5000, 50.4000], [16.0000, 50.5500],
+      [16.5000, 50.7000], [17.0000, 50.8500], [17.5000, 51.0000],
+      [18.0000, 51.2000], [18.5000, 51.4000], [19.0000, 51.5000],
+      [19.5000, 51.7500], [19.8000, 51.8000], [20.0000, 52.0000],
+      [20.5000, 52.1000], [21.0000, 52.2300]
+    ],
+    "waypoints": [
+      { "name": "Munich Electronics Depot", "location": { "lat": 48.1351, "lng": 11.5820 }, "type": "origin" },
+      { "name": "Pilsen Rest Stop", "location": { "lat": 49.7384, "lng": 13.3736 }, "type": "waypoint" },
+      { "name": "Prague Checkpoint", "location": { "lat": 50.0755, "lng": 14.4378 }, "type": "checkpoint" },
+      { "name": "Wroclaw Hub", "location": { "lat": 51.1079, "lng": 17.0385 }, "type": "waypoint" },
+      { "name": "Warsaw Central Warehouse", "location": { "lat": 52.2297, "lng": 21.0122 }, "type": "destination" }
+    ],
+    "noGoZones": [
+      {
+        "id": "ngz-004",
+        "name": "A4 Wroclaw Industrial Zone",
+        "reason": "Reported unauthorized stop incidents near industrial exits",
+        "polygon": [
+          { "lat": 51.00, "lng": 16.80 }, { "lat": 51.00, "lng": 17.20 },
+          { "lat": 51.20, "lng": 17.20 }, { "lat": 51.20, "lng": 16.80 }
+        ]
+      }
+    ],
+    "safeParking": [
+      {
+        "id": "sp-011", "name": "Prague East Truck Port", "location": { "lat": 50.0800, "lng": 14.5000 },
+        "capacity": 55, "security": "fenced", "facilities": ["CCTV", "Lighting", "Fuel", "Shower"]
+      },
+      {
+        "id": "sp-012", "name": "Lodz Motorway Services", "location": { "lat": 51.7592, "lng": 19.4560 },
+        "capacity": 40, "security": "fenced", "facilities": ["CCTV", "Restaurant", "Fuel"]
+      }
+    ],
+    "riskScore": 48,
+    "riskLevel": "medium",
+    "countryTransits": ["Germany", "Czech Republic", "Poland"],
+    "lastUpdated": "2026-02-18"
+  }
+]

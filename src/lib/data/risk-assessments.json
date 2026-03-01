@@ -1,0 +1,126 @@
+[
+  {
+    "id": "ra-001",
+    "routeTemplateId": "route-001",
+    "routeName": "Athens - Rotterdam (Multimodal)",
+    "overallScore": 68,
+    "riskLevel": "high",
+    "factors": [
+      { "category": "Crime", "factor": "Cargo theft rate on corridor", "score": 72, "weight": 0.25, "details": "Balkan corridor experiences 3.2x higher cargo theft rate than Western European average. Key risk zones: Greek-Bulgarian border, Serbian motorway rest areas." },
+      { "category": "Infrastructure", "factor": "Port transition security gaps", "score": 65, "weight": 0.20, "details": "Piraeus port has improved security but multimodal handoff points remain vulnerable. Container tracking coverage gap of 2-4 hours during port operations." },
+      { "category": "Regulatory", "factor": "Cross-border complexity", "score": 55, "weight": 0.15, "details": "Multiple customs jurisdictions. EU/non-EU transitions add delay risk and documentation requirements." },
+      { "category": "Environmental", "factor": "Weather and sea conditions", "score": 60, "weight": 0.15, "details": "Mediterranean winter storms can cause 24-48 hour delays. Feb-Mar is moderate risk season." },
+      { "category": "Geopolitical", "factor": "Regional stability", "score": 45, "weight": 0.10, "details": "Region generally stable. Minor civil unrest risk in transit countries." },
+      { "category": "Historical", "factor": "Past incident rate on route", "score": 78, "weight": 0.15, "details": "4 security incidents in last 12 months on this corridor. 2 route deviations, 1 attempted theft, 1 signal jamming event." }
+    ],
+    "recommendations": [
+      "Use dual tracking devices with independent cellular networks",
+      "Mandatory armed escort through Serbian corridor (Budapest-Belgrade segment)",
+      "Pre-arrange safe parking at Belgrade and Thessaloniki secure yards",
+      "Deploy smart locks with tamper detection on all container access points",
+      "Schedule departures to avoid nighttime transit through no-go zones",
+      "Establish direct communication link with Greek and Serbian police liaison"
+    ],
+    "assessedAt": "2026-02-15T10:00:00Z",
+    "assessedBy": "usr-006",
+    "validUntil": "2026-05-15",
+    "version": "2.4"
+  },
+  {
+    "id": "ra-002",
+    "routeTemplateId": "route-002",
+    "routeName": "Sofia - Hamburg (Road)",
+    "overallScore": 72,
+    "riskLevel": "high",
+    "factors": [
+      { "category": "Crime", "factor": "Balkan corridor theft risk", "score": 80, "weight": 0.30, "details": "Sofia-Belgrade segment passes through highest-risk area for tobacco cargo theft in Europe. 6 incidents in last 18 months." },
+      { "category": "Infrastructure", "factor": "Road quality and rest areas", "score": 60, "weight": 0.15, "details": "Serbian and Hungarian motorway rest areas have limited security. Approved safe parking options are sparse." },
+      { "category": "Regulatory", "factor": "Customs and excise risk", "score": 75, "weight": 0.20, "details": "Tobacco products attract excise fraud attempts. Strict documentation required at every border." },
+      { "category": "Environmental", "factor": "Winter conditions", "score": 50, "weight": 0.10, "details": "Moderate winter weather risk. Mountain passes in Serbia may require snow chains Dec-Feb." },
+      { "category": "Historical", "factor": "Route incident history", "score": 82, "weight": 0.25, "details": "Highest incident rate of any route in portfolio. 5 security events in last 12 months." }
+    ],
+    "recommendations": [
+      "Mandatory dual-driver or convoy format for high-value loads",
+      "No overnight parking outside approved secure facilities",
+      "Real-time SOC monitoring with 5-minute GPS reporting",
+      "Pre-position G4S patrol units at Belgrade and Budapest",
+      "Install smart locks and door sensors on all cargo access points",
+      "Conduct DDI with enhanced security briefing for Balkan corridor"
+    ],
+    "assessedAt": "2026-02-10T14:00:00Z",
+    "assessedBy": "usr-006",
+    "validUntil": "2026-05-10",
+    "version": "3.1"
+  },
+  {
+    "id": "ra-003",
+    "routeTemplateId": "route-003",
+    "routeName": "Lyon - Milan (Road)",
+    "overallScore": 35,
+    "riskLevel": "medium",
+    "factors": [
+      { "category": "Crime", "factor": "Western Europe theft rate", "score": 25, "weight": 0.25, "details": "Low cargo theft rate on Lyon-Milan corridor. Well-policed French and Italian motorways." },
+      { "category": "Infrastructure", "factor": "Fréjus Tunnel and alpine roads", "score": 55, "weight": 0.20, "details": "Fréjus Tunnel transit requires hazmat compliance. Alpine roads can be affected by winter weather." },
+      { "category": "Regulatory", "factor": "Pharmaceutical GDP compliance", "score": 40, "weight": 0.25, "details": "Both France and Italy have strict GDP requirements. Cold chain documentation must be continuous." },
+      { "category": "Environmental", "factor": "Alpine weather conditions", "score": 45, "weight": 0.15, "details": "Winter alpine conditions can cause tunnel closures and delays. Alternative routes add 4+ hours." },
+      { "category": "Historical", "factor": "Route incident history", "score": 15, "weight": 0.15, "details": "Only 1 minor incident in last 24 months (temperature excursion during loading). Clean safety record." }
+    ],
+    "recommendations": [
+      "Ensure backup cold storage facility identified near Chambéry for emergency diversion",
+      "Deploy dual temperature sensors for GDP compliance redundancy",
+      "Check alpine weather and tunnel status 24 hours before departure",
+      "Carry GDP-compliant excursion documentation pack"
+    ],
+    "assessedAt": "2026-01-28T09:00:00Z",
+    "assessedBy": "usr-006",
+    "validUntil": "2026-04-28",
+    "version": "1.6"
+  },
+  {
+    "id": "ra-004",
+    "routeTemplateId": "route-005",
+    "routeName": "Rotterdam - Warsaw (Road)",
+    "overallScore": 42,
+    "riskLevel": "medium",
+    "factors": [
+      { "category": "Crime", "factor": "Electronics theft on corridor", "score": 48, "weight": 0.30, "details": "German-Polish border area has moderate risk for electronics theft. Improved in 2025 after joint police operations." },
+      { "category": "Infrastructure", "factor": "German Autobahn quality", "score": 20, "weight": 0.15, "details": "Excellent road infrastructure throughout Germany. Polish motorway A2 also good quality." },
+      { "category": "Regulatory", "factor": "EU single market", "score": 15, "weight": 0.10, "details": "No customs stops within EU. Minimal regulatory friction." },
+      { "category": "Environmental", "factor": "Weather conditions", "score": 35, "weight": 0.15, "details": "Moderate winter risk. Northern German plain can have fog and ice." },
+      { "category": "Historical", "factor": "Route incident history", "score": 55, "weight": 0.30, "details": "2 incidents in last 12 months. 1 route deviation (construction detour), 1 GPS drift false alarm." }
+    ],
+    "recommendations": [
+      "Standard dual-device tracking sufficient",
+      "Use approved Duisburg and Poznan secure parking for rest stops",
+      "Avoid overnight parking at unapproved locations between Berlin and Polish border"
+    ],
+    "assessedAt": "2026-02-12T11:00:00Z",
+    "assessedBy": "usr-006",
+    "validUntil": "2026-05-12",
+    "version": "2.0"
+  },
+  {
+    "id": "ra-005",
+    "routeTemplateId": "route-007",
+    "routeName": "Hamburg - Stockholm (Multimodal)",
+    "overallScore": 22,
+    "riskLevel": "low",
+    "factors": [
+      { "category": "Crime", "factor": "Nordic theft rate", "score": 10, "weight": 0.25, "details": "Very low cargo theft rate in Germany and Sweden. Among the safest corridors in Europe." },
+      { "category": "Infrastructure", "factor": "Ferry and road quality", "score": 25, "weight": 0.20, "details": "Modern ferry service (TT-Line). Excellent road infrastructure in both countries." },
+      { "category": "Regulatory", "factor": "EU compliance", "score": 15, "weight": 0.15, "details": "Both EU members. Standard documentation sufficient." },
+      { "category": "Environmental", "factor": "Baltic Sea weather", "score": 40, "weight": 0.25, "details": "Winter storms can disrupt Baltic ferry service. Feb-Mar has moderate cancellation risk." },
+      { "category": "Historical", "factor": "Route incident history", "score": 8, "weight": 0.15, "details": "Zero security incidents in last 24 months. Only operational delays due to weather." }
+    ],
+    "recommendations": [
+      "Standard single GPS tracker sufficient for this low-risk route",
+      "Monitor Baltic weather forecast 48 hours in advance",
+      "Have backup ferry booking with alternative carrier",
+      "For cold chain cargo: verify cold storage availability at Lübeck port in case of ferry delay"
+    ],
+    "assessedAt": "2026-02-08T15:00:00Z",
+    "assessedBy": "usr-006",
+    "validUntil": "2026-05-08",
+    "version": "1.2"
+  }
+]

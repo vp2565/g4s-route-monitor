@@ -1,0 +1,173 @@
+[
+  {
+    "id": "pb-001",
+    "name": "Theft / Route Deviation Response",
+    "alertType": ["route_deviation", "geofence_breach", "unauthorized_stop", "tampering"],
+    "severity": ["critical", "high"],
+    "description": "Standard operating procedure for suspected theft, unauthorized route deviation, or tampering events. Includes immediate response, field dispatch, law enforcement coordination, and recovery operations.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Verify & Classify",
+        "description": "Cross-reference deviation with known route alternatives, traffic data, and driver communication. Confirm whether deviation is legitimate (e.g., road closure) or suspicious.",
+        "expectedDuration": "5 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Contact driver via primary and secondary channels. Check last 3 GPS pings for pattern analysis.",
+        "autoEscalateAfter": 10
+      },
+      {
+        "stepNumber": 2,
+        "title": "Attempt Driver Contact",
+        "description": "Make 3 contact attempts via phone, then SMS. Record all attempt timestamps. If driver responds with valid reason, document and close. If no response, escalate immediately.",
+        "expectedDuration": "10 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Call driver phone number, wait 2 minutes, retry. Send SMS after 2nd failed attempt. Log all attempts in system.",
+        "autoEscalateAfter": 15
+      },
+      {
+        "stepNumber": 3,
+        "title": "Activate Field Response",
+        "description": "Dispatch nearest available G4S patrol unit to last known position. Provide unit with vehicle description, cargo details, and threat assessment.",
+        "expectedDuration": "15 minutes",
+        "escalationTier": 2,
+        "requiredAction": "Select and dispatch field unit via dispatch console. Confirm unit acknowledgment and ETA. Share live tracking link.",
+        "autoEscalateAfter": 20
+      },
+      {
+        "stepNumber": 4,
+        "title": "Customer & Stakeholder Notification",
+        "description": "Notify customer's designated emergency contact. Prepare incident briefing with timeline, last known position, and response status.",
+        "expectedDuration": "10 minutes",
+        "escalationTier": 2,
+        "requiredAction": "Send automated high-priority notification to customer. Prepare verbal briefing for customer contact call.",
+        "autoEscalateAfter": null
+      },
+      {
+        "stepNumber": 5,
+        "title": "Law Enforcement Coordination",
+        "description": "If theft confirmed or strongly suspected, initiate law enforcement liaison through G4S country coordinator. Provide GPS trail, vehicle details, and cargo manifest.",
+        "expectedDuration": "30 minutes",
+        "escalationTier": 3,
+        "requiredAction": "Contact G4S country coordinator for the jurisdiction. File preliminary report. Share real-time tracking access with LE liaison.",
+        "autoEscalateAfter": 45
+      },
+      {
+        "stepNumber": 6,
+        "title": "Recovery & Evidence Collection",
+        "description": "Upon field unit arrival, secure the scene. Document vehicle condition, seal integrity, and cargo status. Collect photographic evidence and witness statements if applicable.",
+        "expectedDuration": "60 minutes",
+        "escalationTier": 4,
+        "requiredAction": "Field unit: photograph seals, doors, cargo. Record GPS coordinates. Complete Field Response form with outcome and evidence uploads.",
+        "autoEscalateAfter": null
+      }
+    ],
+    "totalExpectedDuration": "2 hours 10 minutes",
+    "lastReviewed": "2026-01-15",
+    "version": "3.2"
+  },
+  {
+    "id": "pb-002",
+    "name": "Cold Chain Breach Protocol",
+    "alertType": ["temperature_breach", "humidity_breach"],
+    "severity": ["critical", "high", "medium"],
+    "description": "Response protocol for temperature or humidity excursions in cold chain shipments. Critical for pharmaceutical, food, and biotech cargo requiring strict environmental controls.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Validate Sensor Data",
+        "description": "Check for sensor malfunction by comparing primary and backup sensor readings. Review temperature trend over last 30 minutes to distinguish between gradual drift and sudden breach.",
+        "expectedDuration": "5 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Pull condition data history. Compare dual-sensor readings if available. Check device health status and battery level.",
+        "autoEscalateAfter": 10
+      },
+      {
+        "stepNumber": 2,
+        "title": "Driver Intervention",
+        "description": "Contact driver to check refrigeration unit status. Guide driver through reefer diagnostic steps. If driver can resolve (e.g., reefer restart), monitor for 15 minutes to confirm recovery.",
+        "expectedDuration": "15 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Call driver with specific reefer diagnostic checklist. If temperature doesn't recover within 15 minutes of intervention, escalate.",
+        "autoEscalateAfter": 20
+      },
+      {
+        "stepNumber": 3,
+        "title": "Divert to Safe Facility",
+        "description": "If breach cannot be resolved in transit, identify nearest cold storage facility on route. Coordinate with facility for emergency intake. Notify customer of diversion.",
+        "expectedDuration": "30 minutes",
+        "escalationTier": 2,
+        "requiredAction": "Search safe parking database for nearest cold storage. Confirm availability. Reroute driver. Update shipment ETA and notify customer.",
+        "autoEscalateAfter": 40
+      },
+      {
+        "stepNumber": 4,
+        "title": "Cargo Assessment & Documentation",
+        "description": "Upon arrival at safe facility or continued breach, initiate cargo condition assessment. For pharmaceuticals, follow GDP guidelines for temperature excursion documentation.",
+        "expectedDuration": "45 minutes",
+        "escalationTier": 3,
+        "requiredAction": "Document continuous temperature log. Photograph cargo condition. Complete excursion report form. If pharma cargo, notify Quality Assurance team.",
+        "autoEscalateAfter": null
+      },
+      {
+        "stepNumber": 5,
+        "title": "Customer Decision & Resolution",
+        "description": "Present customer with excursion data, cargo assessment, and options (continue, return, destroy). Obtain written authorization for next steps. Complete incident closure.",
+        "expectedDuration": "60 minutes",
+        "escalationTier": 3,
+        "requiredAction": "Send excursion report to customer QA. Await disposition decision. Execute customer's chosen action. Close alert with full documentation.",
+        "autoEscalateAfter": null
+      }
+    ],
+    "totalExpectedDuration": "2 hours 35 minutes",
+    "lastReviewed": "2026-02-01",
+    "version": "2.1"
+  },
+  {
+    "id": "pb-003",
+    "name": "Signal Loss Protocol",
+    "alertType": ["signal_loss", "battery_low"],
+    "severity": ["high", "medium", "low"],
+    "description": "Protocol for handling device signal loss or critically low battery events. Distinguishes between expected coverage gaps (tunnels, rural areas) and suspicious signal loss that may indicate jamming or device removal.",
+    "steps": [
+      {
+        "stepNumber": 1,
+        "title": "Coverage Gap Analysis",
+        "description": "Check if signal loss correlates with known coverage dead zones on the route (tunnels, mountain passes, rural areas). Review historical signal patterns for this route segment.",
+        "expectedDuration": "5 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Compare last known position with route coverage map. Check if other devices on same route show similar patterns. Set 15-minute reconnection timer.",
+        "autoEscalateAfter": 15
+      },
+      {
+        "stepNumber": 2,
+        "title": "Driver Contact & Device Check",
+        "description": "Contact driver to verify device status. Check if device has been accidentally powered off, disconnected, or if there are visible signs of tampering.",
+        "expectedDuration": "10 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Call driver. Ask for visual device inspection. If battery low, instruct driver on charging options. If device unresponsive, log as potential equipment failure.",
+        "autoEscalateAfter": 20
+      },
+      {
+        "stepNumber": 3,
+        "title": "Escalate or Resolve",
+        "description": "If signal not restored after 30 minutes total and driver cannot be reached, treat as potential security event. Cross-reference with theft/deviation playbook. If signal restored, document the gap period.",
+        "expectedDuration": "15 minutes",
+        "escalationTier": 2,
+        "requiredAction": "If suspicious: escalate to Theft/Deviation Response playbook. If equipment failure: schedule device replacement at next checkpoint. Document resolution.",
+        "autoEscalateAfter": 30
+      },
+      {
+        "stepNumber": 4,
+        "title": "Gap Documentation & Reporting",
+        "description": "Document the signal gap period, root cause, and resolution. Update coverage maps if a new dead zone was identified. File equipment incident if device malfunction.",
+        "expectedDuration": "10 minutes",
+        "escalationTier": 1,
+        "requiredAction": "Complete signal loss report. If recurring dead zone, flag for network coverage review. If device issue, create maintenance ticket.",
+        "autoEscalateAfter": null
+      }
+    ],
+    "totalExpectedDuration": "40 minutes",
+    "lastReviewed": "2026-01-20",
+    "version": "1.4"
+  }
+]

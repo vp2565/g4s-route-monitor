@@ -1,0 +1,966 @@
+[
+  {
+    "id": "aud-055",
+    "timestamp": "2026-02-28T14:32:00Z",
+    "action": "alert_resolved",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-003",
+    "entityRef": "ALRT-003 Route Deviation",
+    "details": "Resolved route deviation alert for G4S-SHP-2026-0012. Driver confirmed authorised detour via Thessaloniki bypass due to road closure.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "resolution": "false_alarm",
+      "timeToResolveMinutes": 18,
+      "shipmentId": "G4S-SHP-2026-0012"
+    }
+  },
+  {
+    "id": "aud-054",
+    "timestamp": "2026-02-28T14:10:00Z",
+    "action": "alert_acknowledged",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-003",
+    "entityRef": "ALRT-003 Route Deviation",
+    "details": "Acknowledged route deviation alert. Initiating contact with driver for verification.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "severity": "high",
+      "acknowledgedWithinSLA": true
+    }
+  },
+  {
+    "id": "aud-053",
+    "timestamp": "2026-02-28T14:08:00Z",
+    "action": "alert_created",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-003",
+    "entityRef": "ALRT-003 Route Deviation",
+    "details": "Route deviation detected on G4S-SHP-2026-0012. Vehicle deviated 4.2 km from planned corridor near Thessaloniki.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "deviationKm": 4.2,
+      "shipmentId": "G4S-SHP-2026-0012",
+      "severity": "high"
+    }
+  },
+  {
+    "id": "aud-052",
+    "timestamp": "2026-02-28T12:45:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0025",
+    "entityRef": "G4S-SHP-2026-0025",
+    "details": "Created multimodal shipment Hamburg to Athens via Sofia. 3 segments: road-sea-road. Estimated transit 5 days.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Hamburg",
+      "destination": "Athens",
+      "segments": 3,
+      "customerId": "cust-003"
+    }
+  },
+  {
+    "id": "aud-051",
+    "timestamp": "2026-02-28T11:30:00Z",
+    "action": "user_login",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "user",
+    "entityId": "usr-001",
+    "entityRef": "Nikos Papadopoulos (SOC Operator)",
+    "details": "User logged in to SOC console. Shift start: 08:00-20:00 EET.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "sessionId": "sess-20260228-np01",
+      "shiftId": "shift-morning-0228"
+    }
+  },
+  {
+    "id": "aud-050",
+    "timestamp": "2026-02-28T10:15:00Z",
+    "action": "device_assigned",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "device",
+    "entityId": "dev-038",
+    "entityRef": "TRK-038 (GPS/Temp Sensor)",
+    "details": "Assigned tracking device TRK-038 to shipment G4S-SHP-2026-0025. Cold chain monitoring enabled.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0025",
+      "sensorTypes": "gps,temperature,humidity",
+      "batteryLevel": 98
+    }
+  },
+  {
+    "id": "aud-049",
+    "timestamp": "2026-02-28T09:00:00Z",
+    "action": "notification_sent",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0018",
+    "entityRef": "G4S-SHP-2026-0018",
+    "details": "Sent ETA update notification to customer BAT. Shipment arriving at Rotterdam port 2 hours ahead of schedule.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "notificationType": "eta_update",
+      "recipientEmail": "logistics@bat-europe.com",
+      "channel": "email"
+    }
+  },
+  {
+    "id": "aud-048",
+    "timestamp": "2026-02-27T22:10:00Z",
+    "action": "user_logout",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "user",
+    "entityId": "usr-001",
+    "entityRef": "Nikos Papadopoulos (SOC Operator)",
+    "details": "User logged out. End of evening shift. 4 alerts handled during session.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "sessionDurationMinutes": 480,
+      "alertsHandled": 4
+    }
+  },
+  {
+    "id": "aud-047",
+    "timestamp": "2026-02-27T19:45:00Z",
+    "action": "shipment_completed",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0008",
+    "entityRef": "G4S-SHP-2026-0008",
+    "details": "Shipment G4S-SHP-2026-0008 completed delivery at Rotterdam warehouse. All 3 segments completed within SLA.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "onTime": true,
+      "totalTransitHours": 62,
+      "alertsDuringTransit": 1
+    }
+  },
+  {
+    "id": "aud-046",
+    "timestamp": "2026-02-27T17:30:00Z",
+    "action": "playbook_triggered",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-007",
+    "entityRef": "ALRT-007 Signal Loss",
+    "details": "Triggered Signal Loss playbook for G4S-SHP-2026-0015. Device dev-022 last reported position near Bulgarian border.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "playbookId": "pb-003",
+      "playbookName": "Signal Loss Response",
+      "lastKnownLat": 41.7456,
+      "lastKnownLng": 23.4897
+    }
+  },
+  {
+    "id": "aud-045",
+    "timestamp": "2026-02-27T17:25:00Z",
+    "action": "alert_created",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-007",
+    "entityRef": "ALRT-007 Signal Loss",
+    "details": "Signal loss detected on device dev-022 tracking G4S-SHP-2026-0015. No GPS update for 45 minutes.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "deviceId": "dev-022",
+      "lastSignalMinutesAgo": 45,
+      "severity": "critical"
+    }
+  },
+  {
+    "id": "aud-044",
+    "timestamp": "2026-02-27T15:00:00Z",
+    "action": "ddi_completed",
+    "userId": "usr-004",
+    "userName": "Dimitra Alexiou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0024",
+    "entityRef": "G4S-SHP-2026-0024",
+    "details": "Completed Driver Departure Interview for G4S-SHP-2026-0024. All security checks passed. Seal intact, cargo verified.",
+    "ipAddress": "10.50.3.12",
+    "metadata": {
+      "sealNumber": "GS-2026-88412",
+      "cargoVerified": true,
+      "driverName": "Georgios Stavros",
+      "vehiclePlate": "YHK-4821"
+    }
+  },
+  {
+    "id": "aud-043",
+    "timestamp": "2026-02-27T13:20:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0024",
+    "entityRef": "G4S-SHP-2026-0024",
+    "details": "Created shipment Athens to Sofia. Single road segment. TechElectronics GmbH high-value electronics consignment.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Athens",
+      "destination": "Sofia",
+      "segments": 1,
+      "customerId": "cust-003",
+      "cargoValue": "high"
+    }
+  },
+  {
+    "id": "aud-042",
+    "timestamp": "2026-02-27T10:00:00Z",
+    "action": "risk_assessment_created",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0024",
+    "entityRef": "G4S-SHP-2026-0024",
+    "details": "Generated risk assessment for Athens-Sofia corridor. Overall risk score: 7.2/10. Elevated theft risk near Kulata border crossing.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "riskScore": 7.2,
+      "highRiskZones": 2,
+      "routeId": "rt-005",
+      "recommendedActions": "escort,geofence"
+    }
+  },
+  {
+    "id": "aud-041",
+    "timestamp": "2026-02-26T20:30:00Z",
+    "action": "field_resolved",
+    "userId": "usr-004",
+    "userName": "Dimitra Alexiou",
+    "entityType": "alert",
+    "entityId": "alrt-005",
+    "entityRef": "ALRT-005 Unauthorised Stop",
+    "details": "Field response completed for unauthorised stop alert. Driver found resting at approved truck park. No security incident.",
+    "ipAddress": "10.50.3.12",
+    "metadata": {
+      "outcome": "no_incident",
+      "responseTimeMinutes": 32,
+      "evidencePhotos": 2
+    }
+  },
+  {
+    "id": "aud-040",
+    "timestamp": "2026-02-26T20:05:00Z",
+    "action": "field_arrived",
+    "userId": "usr-004",
+    "userName": "Dimitra Alexiou",
+    "entityType": "alert",
+    "entityId": "alrt-005",
+    "entityRef": "ALRT-005 Unauthorised Stop",
+    "details": "Field unit arrived at location of unauthorised stop. Vehicle located at coordinates 40.6401, 22.9444 (Thessaloniki area).",
+    "ipAddress": "10.50.3.12",
+    "metadata": {
+      "arrivalLat": 40.6401,
+      "arrivalLng": 22.9444,
+      "travelTimeMinutes": 25
+    }
+  },
+  {
+    "id": "aud-039",
+    "timestamp": "2026-02-26T19:40:00Z",
+    "action": "field_dispatched",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-005",
+    "entityRef": "ALRT-005 Unauthorised Stop",
+    "details": "Dispatched field patrol unit Theta-7 to investigate unauthorised stop on G4S-SHP-2026-0019. ETA 25 minutes.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "patrolUnit": "Theta-7",
+      "estimatedArrivalMinutes": 25,
+      "shipmentId": "G4S-SHP-2026-0019"
+    }
+  },
+  {
+    "id": "aud-038",
+    "timestamp": "2026-02-26T19:35:00Z",
+    "action": "playbook_triggered",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-005",
+    "entityRef": "ALRT-005 Unauthorised Stop",
+    "details": "Triggered Theft/Deviation playbook for unauthorised stop event. Step 1: Contact driver. Step 2: Dispatch field unit.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "playbookId": "pb-001",
+      "playbookName": "Theft/Deviation Response",
+      "currentStep": 2
+    }
+  },
+  {
+    "id": "aud-037",
+    "timestamp": "2026-02-26T19:30:00Z",
+    "action": "alert_created",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-005",
+    "entityRef": "ALRT-005 Unauthorised Stop",
+    "details": "Unauthorised stop detected on G4S-SHP-2026-0019. Vehicle stationary for 20 minutes outside approved rest area.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0019",
+      "stationaryMinutes": 20,
+      "severity": "high"
+    }
+  },
+  {
+    "id": "aud-036",
+    "timestamp": "2026-02-26T16:00:00Z",
+    "action": "shipment_updated",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0019",
+    "entityRef": "G4S-SHP-2026-0019",
+    "details": "Updated ETA for G4S-SHP-2026-0019. New ETA: 2026-02-28 08:00 UTC. Delay due to customs processing at Kapitan Andreevo.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "previousETA": "2026-02-27T22:00:00Z",
+      "newETA": "2026-02-28T08:00:00Z",
+      "delayReason": "customs_processing"
+    }
+  },
+  {
+    "id": "aud-035",
+    "timestamp": "2026-02-26T11:15:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0023",
+    "entityRef": "G4S-SHP-2026-0023",
+    "details": "Created shipment Rotterdam to Hamburg. Single road segment. PharmaCo Europe temperature-controlled pharma shipment.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Rotterdam",
+      "destination": "Hamburg",
+      "segments": 1,
+      "customerId": "cust-002",
+      "temperatureControlled": true
+    }
+  },
+  {
+    "id": "aud-034",
+    "timestamp": "2026-02-26T09:30:00Z",
+    "action": "user_login",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "user",
+    "entityId": "usr-003",
+    "entityRef": "Klaus Weber (Dispatcher)",
+    "details": "User logged in from Hamburg office. Daily dispatch operations session.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "sessionId": "sess-20260226-kw01",
+      "location": "Hamburg"
+    }
+  },
+  {
+    "id": "aud-033",
+    "timestamp": "2026-02-25T18:45:00Z",
+    "action": "shipment_completed",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0005",
+    "entityRef": "G4S-SHP-2026-0005",
+    "details": "Shipment G4S-SHP-2026-0005 delivered to BAT distribution centre in London. Proof of delivery uploaded.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "onTime": true,
+      "totalTransitHours": 48,
+      "alertsDuringTransit": 0,
+      "proofOfDelivery": true
+    }
+  },
+  {
+    "id": "aud-032",
+    "timestamp": "2026-02-25T16:20:00Z",
+    "action": "notification_sent",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "alert",
+    "entityId": "alrt-009",
+    "entityRef": "ALRT-009 Cold Chain Breach",
+    "details": "Sent critical alert notification to PharmaCo Europe. Temperature excursion detected on G4S-SHP-2026-0017.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "notificationType": "critical_alert",
+      "recipientEmail": "coldchain@pharmaco-eu.com",
+      "channel": "email_sms",
+      "temperatureCelsius": 9.4
+    }
+  },
+  {
+    "id": "aud-031",
+    "timestamp": "2026-02-25T16:15:00Z",
+    "action": "alert_created",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-009",
+    "entityRef": "ALRT-009 Cold Chain Breach",
+    "details": "Cold chain breach detected on G4S-SHP-2026-0017. Temperature exceeded 8C threshold. Current reading: 9.4C.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0017",
+      "deviceId": "dev-028",
+      "thresholdCelsius": 8,
+      "actualCelsius": 9.4,
+      "severity": "critical"
+    }
+  },
+  {
+    "id": "aud-030",
+    "timestamp": "2026-02-25T14:00:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0022",
+    "entityRef": "G4S-SHP-2026-0022",
+    "details": "Created multimodal shipment Athens to Rotterdam. 2 segments: road to Piraeus, sea to Rotterdam. BAT tobacco consignment.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Athens",
+      "destination": "Rotterdam",
+      "segments": 2,
+      "customerId": "cust-001",
+      "cargoType": "tobacco"
+    }
+  },
+  {
+    "id": "aud-029",
+    "timestamp": "2026-02-25T10:30:00Z",
+    "action": "ddi_completed",
+    "userId": "usr-004",
+    "userName": "Dimitra Alexiou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0022",
+    "entityRef": "G4S-SHP-2026-0022",
+    "details": "Completed Driver Departure Interview for G4S-SHP-2026-0022. Security checks passed. Two seals applied and photographed.",
+    "ipAddress": "10.50.3.12",
+    "metadata": {
+      "sealNumber": "GS-2026-88390",
+      "cargoVerified": true,
+      "driverName": "Alexandros Nikou",
+      "vehiclePlate": "ZNA-3195"
+    }
+  },
+  {
+    "id": "aud-028",
+    "timestamp": "2026-02-24T21:00:00Z",
+    "action": "alert_closed",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-009",
+    "entityRef": "ALRT-009 Cold Chain Breach",
+    "details": "Closed cold chain breach alert. Temperature returned to normal range after refrigeration unit serviced at roadside.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "finalTemperatureCelsius": 4.2,
+      "totalBreachMinutes": 85,
+      "cargoImpact": "none"
+    }
+  },
+  {
+    "id": "aud-027",
+    "timestamp": "2026-02-24T19:30:00Z",
+    "action": "alert_resolved",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-009",
+    "entityRef": "ALRT-009 Cold Chain Breach",
+    "details": "Resolved cold chain breach. Mobile refrigeration technician confirmed unit repaired. Temperature trending down.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "resolution": "equipment_repaired",
+      "timeToResolveMinutes": 195
+    }
+  },
+  {
+    "id": "aud-026",
+    "timestamp": "2026-02-24T16:00:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0021",
+    "entityRef": "G4S-SHP-2026-0021",
+    "details": "Created shipment Sofia to Munich. Road segment via Belgrade and Budapest. TechElectronics server equipment.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Sofia",
+      "destination": "Munich",
+      "segments": 1,
+      "customerId": "cust-003",
+      "cargoType": "electronics"
+    }
+  },
+  {
+    "id": "aud-025",
+    "timestamp": "2026-02-24T12:00:00Z",
+    "action": "device_assigned",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "device",
+    "entityId": "dev-015",
+    "entityRef": "TRK-015 (GPS/Shock Sensor)",
+    "details": "Assigned device TRK-015 to shipment G4S-SHP-2026-0021. Shock detection enabled for fragile electronics cargo.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0021",
+      "sensorTypes": "gps,shock,light",
+      "batteryLevel": 100
+    }
+  },
+  {
+    "id": "aud-024",
+    "timestamp": "2026-02-24T08:30:00Z",
+    "action": "user_login",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "user",
+    "entityId": "usr-006",
+    "entityRef": "Elena Konstantinou (G4S Admin)",
+    "details": "Admin user logged in for system configuration and risk assessment review.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "sessionId": "sess-20260224-ek01",
+      "location": "Athens HQ"
+    }
+  },
+  {
+    "id": "aud-023",
+    "timestamp": "2026-02-23T19:00:00Z",
+    "action": "shipment_completed",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0003",
+    "entityRef": "G4S-SHP-2026-0003",
+    "details": "Shipment G4S-SHP-2026-0003 completed delivery in Sofia. PharmaCo vaccine consignment delivered within temperature range.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "onTime": false,
+      "totalTransitHours": 78,
+      "alertsDuringTransit": 2,
+      "delayMinutes": 180
+    }
+  },
+  {
+    "id": "aud-022",
+    "timestamp": "2026-02-23T15:45:00Z",
+    "action": "device_unassigned",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "device",
+    "entityId": "dev-009",
+    "entityRef": "TRK-009 (GPS/Temp Sensor)",
+    "details": "Unassigned device TRK-009 from completed shipment G4S-SHP-2026-0003. Device returned to Athens depot pool.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0003",
+      "remainingBattery": 34,
+      "returnLocation": "Athens Depot"
+    }
+  },
+  {
+    "id": "aud-021",
+    "timestamp": "2026-02-23T11:00:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0020",
+    "entityRef": "G4S-SHP-2026-0020",
+    "details": "Created shipment Piraeus to Genoa. Sea segment only. BAT containerised tobacco shipment.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Piraeus",
+      "destination": "Genoa",
+      "segments": 1,
+      "customerId": "cust-001",
+      "mode": "sea"
+    }
+  },
+  {
+    "id": "aud-020",
+    "timestamp": "2026-02-22T20:15:00Z",
+    "action": "playbook_triggered",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-012",
+    "entityRef": "ALRT-012 Geofence Breach",
+    "details": "Triggered Theft/Deviation playbook for geofence breach. Vehicle entered designated no-go zone near Serbian border.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "playbookId": "pb-001",
+      "playbookName": "Theft/Deviation Response",
+      "geofenceName": "Serbia Border No-Go Zone"
+    }
+  },
+  {
+    "id": "aud-019",
+    "timestamp": "2026-02-22T20:10:00Z",
+    "action": "alert_created",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-012",
+    "entityRef": "ALRT-012 Geofence Breach",
+    "details": "Geofence breach detected on G4S-SHP-2026-0016. Vehicle entered restricted zone 12 km south of Nis, Serbia.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0016",
+      "deviceId": "dev-019",
+      "severity": "critical",
+      "geofenceId": "gf-serbia-border"
+    }
+  },
+  {
+    "id": "aud-018",
+    "timestamp": "2026-02-22T14:30:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0019",
+    "entityRef": "G4S-SHP-2026-0019",
+    "details": "Created shipment Athens to Istanbul. Road segment via Alexandroupoli. BAT high-value tobacco shipment.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Athens",
+      "destination": "Istanbul",
+      "segments": 1,
+      "customerId": "cust-001"
+    }
+  },
+  {
+    "id": "aud-017",
+    "timestamp": "2026-02-22T11:00:00Z",
+    "action": "route_created",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0019",
+    "entityRef": "Route: Athens-Istanbul via E85",
+    "details": "Created optimised route template Athens to Istanbul via E85 highway. Includes 3 approved rest stops and 1 border crossing waypoint.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "routeId": "rt-008",
+      "distanceKm": 1090,
+      "estimatedHours": 14,
+      "restStops": 3
+    }
+  },
+  {
+    "id": "aud-016",
+    "timestamp": "2026-02-21T17:00:00Z",
+    "action": "shipment_completed",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0001",
+    "entityRef": "G4S-SHP-2026-0001",
+    "details": "Shipment G4S-SHP-2026-0001 completed. BAT consignment delivered to Hamburg distribution hub. Zero incidents.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "onTime": true,
+      "totalTransitHours": 36,
+      "alertsDuringTransit": 0
+    }
+  },
+  {
+    "id": "aud-015",
+    "timestamp": "2026-02-21T14:20:00Z",
+    "action": "ddi_completed",
+    "userId": "usr-004",
+    "userName": "Dimitra Alexiou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0019",
+    "entityRef": "G4S-SHP-2026-0019",
+    "details": "Completed Driver Departure Interview for G4S-SHP-2026-0019. Seal verified, cargo manifest checked, driver identity confirmed.",
+    "ipAddress": "10.50.3.12",
+    "metadata": {
+      "sealNumber": "GS-2026-88356",
+      "cargoVerified": true,
+      "driverName": "Mehmet Yilmaz",
+      "vehiclePlate": "XPA-7733"
+    }
+  },
+  {
+    "id": "aud-014",
+    "timestamp": "2026-02-21T10:00:00Z",
+    "action": "risk_assessment_created",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0019",
+    "entityRef": "G4S-SHP-2026-0019",
+    "details": "Generated risk assessment for Athens-Istanbul corridor. Risk score: 8.1/10. High cargo theft risk in Thrace region.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "riskScore": 8.1,
+      "highRiskZones": 3,
+      "routeId": "rt-008",
+      "recommendedActions": "escort,geofence,increased_reporting"
+    }
+  },
+  {
+    "id": "aud-013",
+    "timestamp": "2026-02-20T22:00:00Z",
+    "action": "alert_escalated",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-012",
+    "entityRef": "ALRT-012 Geofence Breach",
+    "details": "Escalated geofence breach alert to Tier 2. Unable to contact driver. Notifying local G4S operational centre in Belgrade.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "escalationTier": 2,
+      "reason": "driver_uncontactable",
+      "notifiedCentre": "Belgrade SOC"
+    }
+  },
+  {
+    "id": "aud-012",
+    "timestamp": "2026-02-20T16:30:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0018",
+    "entityRef": "G4S-SHP-2026-0018",
+    "details": "Created multimodal shipment Athens to Rotterdam via Piraeus port. PharmaCo insulin shipment requiring 2-8C cold chain.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Athens",
+      "destination": "Rotterdam",
+      "segments": 3,
+      "customerId": "cust-002",
+      "temperatureRange": "2-8C"
+    }
+  },
+  {
+    "id": "aud-011",
+    "timestamp": "2026-02-20T13:00:00Z",
+    "action": "field_dispatched",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-012",
+    "entityRef": "ALRT-012 Geofence Breach",
+    "details": "Dispatched Belgrade-based patrol unit Delta-3 to intercept vehicle that breached Serbian border geofence.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "patrolUnit": "Delta-3",
+      "estimatedArrivalMinutes": 45,
+      "shipmentId": "G4S-SHP-2026-0016"
+    }
+  },
+  {
+    "id": "aud-010",
+    "timestamp": "2026-02-20T09:15:00Z",
+    "action": "user_login",
+    "userId": "usr-002",
+    "userName": "Sarah Mitchell",
+    "entityType": "user",
+    "entityId": "usr-002",
+    "entityRef": "Sarah Mitchell (Customer Admin)",
+    "details": "Customer admin logged in from BAT London office. Reviewing weekly shipment performance report.",
+    "ipAddress": "10.60.4.22",
+    "metadata": {
+      "sessionId": "sess-20260220-sm01",
+      "location": "London",
+      "customerId": "cust-001"
+    }
+  },
+  {
+    "id": "aud-009",
+    "timestamp": "2026-02-19T18:30:00Z",
+    "action": "shipment_completed",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0010",
+    "entityRef": "G4S-SHP-2026-0010",
+    "details": "Shipment G4S-SHP-2026-0010 completed at Munich warehouse. TechElectronics consignment. Minor delay at Austrian border.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "onTime": false,
+      "totalTransitHours": 52,
+      "alertsDuringTransit": 1,
+      "delayMinutes": 120
+    }
+  },
+  {
+    "id": "aud-008",
+    "timestamp": "2026-02-19T15:00:00Z",
+    "action": "device_assigned",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "device",
+    "entityId": "dev-031",
+    "entityRef": "TRK-031 (GPS/Temp/Humidity)",
+    "details": "Assigned device TRK-031 to shipment G4S-SHP-2026-0018. Full environmental monitoring suite for pharma cold chain.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "shipmentId": "G4S-SHP-2026-0018",
+      "sensorTypes": "gps,temperature,humidity,light",
+      "batteryLevel": 95
+    }
+  },
+  {
+    "id": "aud-007",
+    "timestamp": "2026-02-19T11:45:00Z",
+    "action": "alert_acknowledged",
+    "userId": "usr-001",
+    "userName": "Nikos Papadopoulos",
+    "entityType": "alert",
+    "entityId": "alrt-015",
+    "entityRef": "ALRT-015 Speed Violation",
+    "details": "Acknowledged speed violation alert on G4S-SHP-2026-0014. Vehicle recorded at 132 km/h in 90 km/h zone near Larissa.",
+    "ipAddress": "10.30.1.15",
+    "metadata": {
+      "severity": "medium",
+      "recordedSpeed": 132,
+      "speedLimit": 90,
+      "acknowledgedWithinSLA": true
+    }
+  },
+  {
+    "id": "aud-006",
+    "timestamp": "2026-02-18T20:00:00Z",
+    "action": "notification_sent",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0016",
+    "entityRef": "G4S-SHP-2026-0016",
+    "details": "Sent weekly shipment status digest to TechElectronics GmbH. Summary: 4 active, 2 completed, 1 delayed.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "notificationType": "weekly_digest",
+      "recipientEmail": "supply-chain@techelectronics.de",
+      "channel": "email",
+      "activeShipments": 4
+    }
+  },
+  {
+    "id": "aud-005",
+    "timestamp": "2026-02-18T14:30:00Z",
+    "action": "shipment_created",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0017",
+    "entityRef": "G4S-SHP-2026-0017",
+    "details": "Created shipment Milan to Vienna. Road segment via Brenner Pass. PharmaCo temperature-sensitive biologics.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "origin": "Milan",
+      "destination": "Vienna",
+      "segments": 1,
+      "customerId": "cust-002",
+      "temperatureControlled": true
+    }
+  },
+  {
+    "id": "aud-004",
+    "timestamp": "2026-02-17T13:00:00Z",
+    "action": "shipment_updated",
+    "userId": "usr-003",
+    "userName": "Klaus Weber",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0014",
+    "entityRef": "G4S-SHP-2026-0014",
+    "details": "Updated shipment G4S-SHP-2026-0014 segment details. Added waypoint at Thessaloniki fuel stop. Driver rest period scheduled.",
+    "ipAddress": "10.40.2.88",
+    "metadata": {
+      "updatedField": "waypoints",
+      "waypointAdded": "Thessaloniki Fuel Stop",
+      "restPeriodMinutes": 45
+    }
+  },
+  {
+    "id": "aud-003",
+    "timestamp": "2026-02-16T10:30:00Z",
+    "action": "ddi_completed",
+    "userId": "usr-004",
+    "userName": "Dimitra Alexiou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0017",
+    "entityRef": "G4S-SHP-2026-0017",
+    "details": "Completed Driver Departure Interview for G4S-SHP-2026-0017. Cold chain pre-checks passed. Refrigeration unit verified at 4.0C.",
+    "ipAddress": "10.50.3.12",
+    "metadata": {
+      "sealNumber": "GS-2026-88301",
+      "cargoVerified": true,
+      "driverName": "Marco Benedetti",
+      "vehiclePlate": "MI-4429-KL",
+      "initialTempCelsius": 4.0
+    }
+  },
+  {
+    "id": "aud-002",
+    "timestamp": "2026-02-15T16:00:00Z",
+    "action": "user_login",
+    "userId": "usr-005",
+    "userName": "Jean-Pierre Moreau",
+    "entityType": "user",
+    "entityId": "usr-005",
+    "entityRef": "Jean-Pierre Moreau (OEM Partner)",
+    "details": "OEM partner logged in via shared tracking portal. Viewing tagged BAT consignments.",
+    "ipAddress": "10.70.5.33",
+    "metadata": {
+      "sessionId": "sess-20260215-jpm01",
+      "accessType": "tracking_portal",
+      "customerId": "cust-001"
+    }
+  },
+  {
+    "id": "aud-001",
+    "timestamp": "2026-02-14T09:00:00Z",
+    "action": "route_created",
+    "userId": "usr-006",
+    "userName": "Elena Konstantinou",
+    "entityType": "shipment",
+    "entityId": "G4S-SHP-2026-0016",
+    "entityRef": "Route: Sofia-Munich via Belgrade",
+    "details": "Created route template Sofia to Munich via Belgrade and Budapest. Includes safe parking locations and border crossing protocols.",
+    "ipAddress": "10.30.1.50",
+    "metadata": {
+      "routeId": "rt-007",
+      "distanceKm": 1340,
+      "estimatedHours": 18,
+      "safeParkingLocations": 4
+    }
+  }
+]
