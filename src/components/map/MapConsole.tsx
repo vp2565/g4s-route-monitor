@@ -596,6 +596,21 @@ export default function MapConsole() {
     return generateBreadcrumbs(fullPath, selectedShipment.progressPercent, Math.abs(seed));
   }, [selectedShipment, routeSegments]);
 
+  // Recompute the selected shipment's position from routeSegments so the blob
+  // matches the breadcrumb tip. routeSegments uses OSRM road-snapped geometry
+  // which differs from the local coordinates array used for initial blob positions.
+  const selectedShipmentPos = useMemo<[number, number] | null>(() => {
+    if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
+    if (routeSegments.length === 0) return null;
+
+    const fullPath: [number, number][] = [];
+    for (const seg of routeSegments) {
+      for (const pos of seg.positions) fullPath.push(pos);
+    }
+    if (fullPath.length < 2) return null;
+    return getPositionAlongPath(fullPath, selectedShipment.progressPercent);
+  }, [selectedShipment, routeSegments]);
+
   // Deviations from breadcrumbs
   const deviations = useMemo(() => {
     if (!breadcrumbResult || breadcrumbResult.actualPath.length === 0) return [];
@@ -832,7 +847,9 @@ export default function MapConsole() {
               const color = getMarkerColor(shipment);
               const isSelected = shipment.id === selectedShipmentId;
               const hasSel = !!selectedShipmentId;
-              const pos = shipmentPositions.get(shipment.id)!;
+              // Use OSRM-derived position for the selected shipment so it
+              // matches the current position marker / breadcrumb tip
+              const pos = (isSelected && selectedShipmentPos) || shipmentPositions.get(shipment.id)!;
 
               return (
                 <CircleMarker
