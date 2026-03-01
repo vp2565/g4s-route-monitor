@@ -571,23 +571,36 @@ export default function MapConsole() {
     return () => { cancelled = true; };
   }, [selectedShipmentId, allShipments]);
 
-  // Breadcrumbs: use the same local coordinates path that blob positions use,
-  // so the green actual-path line ends exactly at the blob (= current position).
+  // Build the full path from routeSegments (same geometry as blue planned route)
+  const selectedFullPath = useMemo<[number, number][]>(() => {
+    if (routeSegments.length === 0) return [];
+    const path: [number, number][] = [];
+    for (const seg of routeSegments) {
+      for (const pos of seg.positions) path.push(pos);
+    }
+    return path;
+  }, [routeSegments]);
+
+  // Breadcrumbs: use routeSegments path so green actual line follows blue planned route
   const breadcrumbResult = useMemo(() => {
     if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
-    if (!selectedRoute) return null;
+    if (selectedFullPath.length < 2) return null;
 
-    const fullPath = buildFullPathFromRoute(selectedRoute);
-    if (fullPath.length < 2) return null;
-
-    // Hash shipment ID for seed
     let seed = 0;
     for (let i = 0; i < selectedShipment.id.length; i++) {
       seed = ((seed << 5) - seed + selectedShipment.id.charCodeAt(i)) | 0;
     }
 
-    return generateBreadcrumbs(fullPath, selectedShipment.progressPercent, Math.abs(seed));
-  }, [selectedShipment, selectedRoute]);
+    return generateBreadcrumbs(selectedFullPath, selectedShipment.progressPercent, Math.abs(seed));
+  }, [selectedShipment, selectedFullPath]);
+
+  // Move the selected shipment's blob to match the routeSegments path
+  // so it sits at the tip of the green actual line
+  const selectedShipmentPos = useMemo<[number, number] | null>(() => {
+    if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
+    if (selectedFullPath.length < 2) return null;
+    return getPositionAlongPath(selectedFullPath, selectedShipment.progressPercent);
+  }, [selectedShipment, selectedFullPath]);
 
   // Deviations from breadcrumbs
   const deviations = useMemo(() => {
@@ -805,7 +818,8 @@ export default function MapConsole() {
               const color = getMarkerColor(shipment);
               const isSelected = shipment.id === selectedShipmentId;
               const hasSel = !!selectedShipmentId;
-              const pos = shipmentPositions.get(shipment.id)!;
+              // When selected, use OSRM-derived position so blob sits at tip of green line
+              const pos = (isSelected && selectedShipmentPos) || shipmentPositions.get(shipment.id)!;
 
               return (
                 <CircleMarker
