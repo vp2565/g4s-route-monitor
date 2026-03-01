@@ -1,16 +1,6 @@
 import type { Shipment } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const STATUS_COLORS: Record<string, { bg: string; text: string; darkBg: string; darkText: string }> = {
-  in_transit: { bg: "bg-green-100", text: "text-green-800", darkBg: "bg-green-900/40", darkText: "text-green-300" },
-  active: { bg: "bg-green-100", text: "text-green-800", darkBg: "bg-green-900/40", darkText: "text-green-300" },
-  at_checkpoint: { bg: "bg-blue-100", text: "text-blue-800", darkBg: "bg-blue-900/40", darkText: "text-blue-300" },
-  delayed: { bg: "bg-yellow-100", text: "text-yellow-800", darkBg: "bg-yellow-900/40", darkText: "text-yellow-300" },
-  planned: { bg: "bg-gray-100", text: "text-gray-700", darkBg: "bg-gray-800", darkText: "text-gray-300" },
-  ddi_pending: { bg: "bg-gray-100", text: "text-gray-700", darkBg: "bg-gray-800", darkText: "text-gray-300" },
-  completed: { bg: "bg-gray-100", text: "text-gray-500", darkBg: "bg-gray-800", darkText: "text-gray-400" },
-  cancelled: { bg: "bg-red-100", text: "text-red-800", darkBg: "bg-red-900/40", darkText: "text-red-300" },
-};
+import { STATUS_COLORS, formatStatus } from "../mapUtils";
 
 const RISK_COLORS: Record<string, string> = {
   low: "text-green-500",
@@ -18,10 +8,6 @@ const RISK_COLORS: Record<string, string> = {
   high: "text-orange-500",
   critical: "text-red-500",
 };
-
-function formatStatus(status: string): string {
-  return status.split("_").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-}
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-GB", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(value);

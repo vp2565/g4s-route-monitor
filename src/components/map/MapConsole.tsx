@@ -30,6 +30,7 @@ import { GeofenceOverlays } from "./GeofenceOverlays";
 import { RiskHeatmap } from "./RiskHeatmap";
 import { generateBreadcrumbs } from "./breadcrumbUtils";
 import { findDeviations } from "./deviationUtils";
+import { haversine } from "./mapUtils";
 
 // --- Route segment types ---
 
@@ -111,17 +112,6 @@ function generateSeaRoute(start: [number, number], end: [number, number]): [numb
 
 // --- Interpolate position along a path at a given percentage ---
 
-function haversineDist(a: [number, number], b: [number, number]): number {
-  const R = 6_371_000;
-  const toRad = (d: number) => (d * Math.PI) / 180;
-  const dLat = toRad(b[0] - a[0]);
-  const dLng = toRad(b[1] - a[1]);
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(h));
-}
-
 function getPositionAlongPath(
   path: [number, number][],
   percent: number
@@ -132,7 +122,7 @@ function getPositionAlongPath(
 
   const cumul: number[] = [0];
   for (let i = 1; i < path.length; i++) {
-    cumul.push(cumul[i - 1] + haversineDist(path[i - 1], path[i]));
+    cumul.push(cumul[i - 1] + haversine(path[i - 1], path[i]));
   }
   const total = cumul[cumul.length - 1];
   if (total === 0) return path[0];
@@ -156,21 +146,10 @@ function findClosestIndex(path: [number, number][], target: [number, number]): n
   let bestIdx = 0;
   let bestDist = Infinity;
   for (let i = 0; i < path.length; i++) {
-    const d = haversineDist(path[i], target);
+    const d = haversine(path[i], target);
     if (d < bestDist) { bestDist = d; bestIdx = i; }
   }
   return bestIdx;
-}
-
-/**
- * Build a full [lat,lng] path from a route template for position interpolation.
- * Uses the coordinates array directly — it covers the entire journey including
- * sea portions for multimodal routes.
- */
-function buildFullPathFromRoute(route: RouteTemplate): [number, number][] {
-  return route.coordinates.map(
-    ([lng, lat]) => [lat, lng] as [number, number]
-  );
 }
 
 // --- Instant fallback route from local GeoJSON data (no network) ---
@@ -401,7 +380,7 @@ export default function MapConsole() {
       if (s.progressPercent > 0 && s.routeTemplateId) {
         const route = getRouteTemplateById(s.routeTemplateId);
         if (route) {
-          const fullPath = buildFullPathFromRoute(route);
+          const fullPath = route.coordinates.map(([lng, lat]) => [lat, lng] as [number, number]);
           const pos = getPositionAlongPath(fullPath, s.progressPercent);
           if (pos) {
             posMap.set(s.id, pos);
@@ -571,15 +550,11 @@ export default function MapConsole() {
     return () => { cancelled = true; };
   }, [selectedShipmentId, allShipments]);
 
-  // Build the full path from routeSegments (same geometry as blue planned route)
-  const selectedFullPath = useMemo<[number, number][]>(() => {
-    if (routeSegments.length === 0) return [];
-    const path: [number, number][] = [];
-    for (const seg of routeSegments) {
-      for (const pos of seg.positions) path.push(pos);
-    }
-    return path;
-  }, [routeSegments]);
+  // Full path from routeSegments (same geometry as blue planned route)
+  const selectedFullPath = useMemo<[number, number][]>(
+    () => routeSegments.flatMap((seg) => seg.positions),
+    [routeSegments]
+  );
 
   // Breadcrumbs: use routeSegments path so green actual line follows blue planned route
   const breadcrumbResult = useMemo(() => {
