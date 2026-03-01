@@ -571,20 +571,13 @@ export default function MapConsole() {
     return () => { cancelled = true; };
   }, [selectedShipmentId, allShipments]);
 
-  // Breadcrumbs: generate from ALL segments in order (road + sea + air)
-  // so that progress % maps correctly across the full multimodal journey
+  // Breadcrumbs: use the same local coordinates path that blob positions use,
+  // so the green actual-path line ends exactly at the blob (= current position).
   const breadcrumbResult = useMemo(() => {
     if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
-    if (routeSegments.length === 0) return null;
+    if (!selectedRoute) return null;
 
-    // Concatenate all segment positions into one continuous path
-    const fullPath: [number, number][] = [];
-    for (const seg of routeSegments) {
-      for (const pos of seg.positions) {
-        fullPath.push(pos);
-      }
-    }
-
+    const fullPath = buildFullPathFromRoute(selectedRoute);
     if (fullPath.length < 2) return null;
 
     // Hash shipment ID for seed
@@ -594,22 +587,7 @@ export default function MapConsole() {
     }
 
     return generateBreadcrumbs(fullPath, selectedShipment.progressPercent, Math.abs(seed));
-  }, [selectedShipment, routeSegments]);
-
-  // Recompute the selected shipment's position from routeSegments so the blob
-  // matches the breadcrumb tip. routeSegments uses OSRM road-snapped geometry
-  // which differs from the local coordinates array used for initial blob positions.
-  const selectedShipmentPos = useMemo<[number, number] | null>(() => {
-    if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
-    if (routeSegments.length === 0) return null;
-
-    const fullPath: [number, number][] = [];
-    for (const seg of routeSegments) {
-      for (const pos of seg.positions) fullPath.push(pos);
-    }
-    if (fullPath.length < 2) return null;
-    return getPositionAlongPath(fullPath, selectedShipment.progressPercent);
-  }, [selectedShipment, routeSegments]);
+  }, [selectedShipment, selectedRoute]);
 
   // Deviations from breadcrumbs
   const deviations = useMemo(() => {
@@ -789,26 +767,6 @@ export default function MapConsole() {
               />
             )}
 
-            {/* Current position marker — at the tip of the actual path */}
-            {breadcrumbResult && breadcrumbResult.actualPath.length > 0 && (
-              <CircleMarker
-                center={breadcrumbResult.actualPath[breadcrumbResult.actualPath.length - 1]}
-                radius={8}
-                pathOptions={{
-                  color: "#fff",
-                  fillColor: "#22C55E",
-                  fillOpacity: 1,
-                  weight: 3,
-                }}
-              >
-                <Tooltip direction="top" offset={[0, -10]}>
-                  <div style={{ fontFamily: "system-ui", fontSize: 12, fontWeight: 600 }}>
-                    Current Position
-                  </div>
-                </Tooltip>
-              </CircleMarker>
-            )}
-
             {/* Deviation markers */}
             {deviations.map((dev, idx) => (
               <CircleMarker
@@ -847,9 +805,7 @@ export default function MapConsole() {
               const color = getMarkerColor(shipment);
               const isSelected = shipment.id === selectedShipmentId;
               const hasSel = !!selectedShipmentId;
-              // Use OSRM-derived position for the selected shipment so it
-              // matches the current position marker / breadcrumb tip
-              const pos = (isSelected && selectedShipmentPos) || shipmentPositions.get(shipment.id)!;
+              const pos = shipmentPositions.get(shipment.id)!;
 
               return (
                 <CircleMarker
