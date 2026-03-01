@@ -444,7 +444,7 @@ export default function MapConsole() {
       seed = ((seed << 5) - seed + selectedShipment.id.charCodeAt(i)) | 0;
     }
 
-    return generateBreadcrumbs(fullRoadPath, selectedShipment.progressPercent, 300, Math.abs(seed));
+    return generateBreadcrumbs(fullRoadPath, selectedShipment.progressPercent, Math.abs(seed));
   }, [selectedShipment, routeSegments]);
 
   // Deviations from breadcrumbs

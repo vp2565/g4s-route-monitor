@@ -28,12 +28,12 @@ export interface DeviationPoint {
  *
  * @param actualPath The actual GPS breadcrumb path
  * @param plannedPath The original planned route
- * @param thresholdMetres Distance threshold (default 500m)
+ * @param thresholdMetres Distance threshold (default 1000m / 1km)
  */
 export function findDeviations(
   actualPath: [number, number][],
   plannedPath: [number, number][],
-  thresholdMetres: number = 500
+  thresholdMetres: number = 1000
 ): DeviationPoint[] {
   if (actualPath.length === 0 || plannedPath.length === 0) return [];
 
