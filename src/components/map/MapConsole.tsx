@@ -334,6 +334,7 @@ export default function MapConsole() {
   const [selectedShipmentId, setSelectedShipmentId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [zoomTrigger, setZoomTrigger] = useState(0);
+  const [osrmCacheVersion, setOsrmCacheVersion] = useState(0);
 
   // Load all shipments
   const allShipments = useMemo(() => getAllShipments(), []);
@@ -372,15 +373,19 @@ export default function MapConsole() {
   }, [allShipments, filters, isCustomerScoped, customerScope]);
 
   // Compute live positions from route geometry + progressPercent
-  // This replaces the static seed data positions with accurate interpolated ones
+  // Prefers OSRM-cached path (road-snapped) when available, falls back to local coords
   const shipmentPositions = useMemo(() => {
     const posMap = new Map<string, [number, number]>();
     for (const s of filteredShipments) {
-      if (!s.currentPosition) continue; // no position at all
+      if (!s.currentPosition) continue;
       if (s.progressPercent > 0 && s.routeTemplateId) {
         const route = getRouteTemplateById(s.routeTemplateId);
         if (route) {
-          const fullPath = route.coordinates.map(([lng, lat]) => [lat, lng] as [number, number]);
+          // Use OSRM-cached path if available (accurate road-snapped geometry)
+          const cached = osrmCacheRef.current.get(route.id);
+          const fullPath = cached
+            ? cached.flatMap((seg) => seg.positions)
+            : route.coordinates.map(([lng, lat]) => [lat, lng] as [number, number]);
           const pos = getPositionAlongPath(fullPath, s.progressPercent);
           if (pos) {
             posMap.set(s.id, pos);
@@ -388,11 +393,11 @@ export default function MapConsole() {
           }
         }
       }
-      // Fallback to seed data position
       posMap.set(s.id, [s.currentPosition.lat, s.currentPosition.lng]);
     }
     return posMap;
-  }, [filteredShipments]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredShipments, osrmCacheVersion]);
 
   const mappableShipments = useMemo(
     () => filteredShipments.filter((s) => shipmentPositions.has(s.id)),
@@ -484,6 +489,7 @@ export default function MapConsole() {
             const osrmResult = [{ positions, mode: "road" as const }];
             osrmCacheRef.current.set(cacheKey, osrmResult);
             setRouteSegments(osrmResult);
+            setOsrmCacheVersion((v) => v + 1);
           }
         })
         .catch(() => {
@@ -544,6 +550,7 @@ export default function MapConsole() {
         for (const r of landResults) { if (r) segments.push(r); }
         osrmCacheRef.current.set(cacheKey, segments);
         setRouteSegments(segments);
+        setOsrmCacheVersion((v) => v + 1);
       });
     }
 
@@ -567,14 +574,6 @@ export default function MapConsole() {
     }
 
     return generateBreadcrumbs(selectedFullPath, selectedShipment.progressPercent, Math.abs(seed));
-  }, [selectedShipment, selectedFullPath]);
-
-  // Move the selected shipment's blob to match the routeSegments path
-  // so it sits at the tip of the green actual line
-  const selectedShipmentPos = useMemo<[number, number] | null>(() => {
-    if (!selectedShipment || selectedShipment.progressPercent <= 0) return null;
-    if (selectedFullPath.length < 2) return null;
-    return getPositionAlongPath(selectedFullPath, selectedShipment.progressPercent);
   }, [selectedShipment, selectedFullPath]);
 
   // Deviations from breadcrumbs
@@ -793,8 +792,7 @@ export default function MapConsole() {
               const color = getMarkerColor(shipment);
               const isSelected = shipment.id === selectedShipmentId;
               const hasSel = !!selectedShipmentId;
-              // When selected, use OSRM-derived position so blob sits at tip of green line
-              const pos = (isSelected && selectedShipmentPos) || shipmentPositions.get(shipment.id)!;
+              const pos = shipmentPositions.get(shipment.id)!;
 
               return (
                 <CircleMarker
