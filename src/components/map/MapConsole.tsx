@@ -151,45 +151,26 @@ function getPositionAlongPath(
   return path[path.length - 1];
 }
 
-/** Build a full [lat,lng] path from a route template (local data, no network) */
+/** Find the index in a [lat,lng] path closest to a given point */
+function findClosestIndex(path: [number, number][], target: [number, number]): number {
+  let bestIdx = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < path.length; i++) {
+    const d = haversineDist(path[i], target);
+    if (d < bestDist) { bestDist = d; bestIdx = i; }
+  }
+  return bestIdx;
+}
+
+/**
+ * Build a full [lat,lng] path from a route template for position interpolation.
+ * Uses the coordinates array directly — it covers the entire journey including
+ * sea portions for multimodal routes.
+ */
 function buildFullPathFromRoute(route: RouteTemplate): [number, number][] {
-  const isMultimodal = route.transportModes.length > 1;
-  if (!isMultimodal) {
-    return route.coordinates.map(([lng, lat]) => [lat, lng] as [number, number]);
-  }
-
-  // Multimodal: concatenate land waypoints + sea lane waypoints in order
-  const wps = route.waypoints;
-  const fullPath: [number, number][] = [];
-  let i = 0;
-  let landStart = 0;
-
-  while (i < wps.length) {
-    if (wps[i].type === "port") {
-      // Land points before port
-      for (let j = landStart; j <= i; j++) {
-        fullPath.push([wps[j].location.lat, wps[j].location.lng]);
-      }
-      if (i + 1 < wps.length && wps[i + 1].type === "port") {
-        // Sea route between ports
-        const seaPoints = generateSeaRoute(
-          [wps[i].location.lat, wps[i].location.lng],
-          [wps[i + 1].location.lat, wps[i + 1].location.lng]
-        );
-        // Skip first (already added as port) to avoid duplication
-        for (let k = 1; k < seaPoints.length; k++) {
-          fullPath.push(seaPoints[k]);
-        }
-        i += 2;
-        landStart = i - 1;
-      } else { i++; landStart = i; }
-    } else { i++; }
-  }
-  // Remaining land points
-  for (let j = landStart; j < wps.length; j++) {
-    fullPath.push([wps[j].location.lat, wps[j].location.lng]);
-  }
-  return fullPath;
+  return route.coordinates.map(
+    ([lng, lat]) => [lat, lng] as [number, number]
+  );
 }
 
 // --- Instant fallback route from local GeoJSON data (no network) ---
@@ -199,49 +180,67 @@ function buildFallbackSegments(
   isMultimodal: boolean,
   wps: RouteWaypoint[]
 ): RouteSegment[] {
+  const allCoords: [number, number][] = route.coordinates.map(
+    ([lng, lat]) => [lat, lng] as [number, number]
+  );
+
   if (!isMultimodal) {
-    // Single-mode: use the route template's GeoJSON coordinates
-    const positions: [number, number][] = route.coordinates.map(
-      ([lng, lat]) => [lat, lng] as [number, number]
-    );
-    return [{ positions, mode: "road" }];
+    return [{ positions: allCoords, mode: "road" }];
   }
 
-  // Multimodal: build sea segments from lane waypoints + straight lines for land
+  // Multimodal: split the coordinates array at port locations,
+  // use actual coordinates for land segments, sea lanes for sea segments
+  const portIndices: number[] = [];
+  for (let i = 0; i < wps.length; i++) {
+    if (wps[i].type === "port") portIndices.push(i);
+  }
+
+  if (portIndices.length < 2) {
+    return [{ positions: allCoords, mode: "road" }];
+  }
+
+  // Find closest coordinate index for each port
+  const portCoordIdx: number[] = portIndices.map((pi) =>
+    findClosestIndex(allCoords, [wps[pi].location.lat, wps[pi].location.lng])
+  );
+
   const segments: RouteSegment[] = [];
-  let i = 0;
-  let landStart = 0;
 
-  while (i < wps.length) {
-    if (wps[i].type === "port") {
-      // Land segment before this port
-      if (landStart < i) {
-        const landWps = wps.slice(landStart, i + 1);
-        segments.push({
-          positions: landWps.map((wp) => [wp.location.lat, wp.location.lng] as [number, number]),
-          mode: "road",
-        });
-      }
-      if (i + 1 < wps.length && wps[i + 1].type === "port") {
-        segments.push({
-          positions: generateSeaRoute(
-            [wps[i].location.lat, wps[i].location.lng],
-            [wps[i + 1].location.lat, wps[i + 1].location.lng]
-          ),
-          mode: "sea",
-        });
-        i += 2;
-        landStart = i - 1;
-      } else { i++; landStart = i; }
-    } else { i++; }
-  }
-  if (landStart < wps.length - 1) {
-    const landWps = wps.slice(landStart);
+  // Land segment: start → first port (using actual coordinates)
+  // For route-001 the port (Piraeus) is very close to the origin so
+  // the land segment before port may be short — include all coords before sea portion.
+  // The coordinates array often has the land route going past the port area,
+  // so find where land ends and sea begins based on the coord indices.
+  const firstPortCoord = portCoordIdx[0];
+  if (firstPortCoord > 0) {
     segments.push({
-      positions: landWps.map((wp) => [wp.location.lat, wp.location.lng] as [number, number]),
+      positions: allCoords.slice(0, firstPortCoord + 1),
       mode: "road",
     });
   }
+
+  // Sea segments between port pairs
+  for (let p = 0; p < portIndices.length - 1; p++) {
+    const fromPort = portIndices[p];
+    const toPort = portIndices[p + 1];
+    segments.push({
+      positions: generateSeaRoute(
+        [wps[fromPort].location.lat, wps[fromPort].location.lng],
+        [wps[toPort].location.lat, wps[toPort].location.lng]
+      ),
+      mode: "sea",
+    });
+  }
+
+  // Land segment: last port → end (using actual coordinates)
+  const lastPortCoordIdx = portCoordIdx[portCoordIdx.length - 1];
+  if (lastPortCoordIdx < allCoords.length - 1) {
+    segments.push({
+      positions: allCoords.slice(lastPortCoordIdx),
+      mode: "road",
+    });
+  }
+
   return segments;
 }
 
