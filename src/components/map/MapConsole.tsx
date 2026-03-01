@@ -339,6 +339,9 @@ export default function MapConsole() {
   // Load all shipments
   const allShipments = useMemo(() => getAllShipments(), []);
 
+  // OSRM cache: stores fetched road-snapped segments keyed by route ID
+  const osrmCacheRef = useRef<Map<string, RouteSegment[]>>(new Map());
+
   // Filter shipments
   const filteredShipments = useMemo(() => {
     return allShipments.filter((s) => {
@@ -438,7 +441,6 @@ export default function MapConsole() {
   // Route segments for selected shipment
   // Two-phase: instant fallback from local GeoJSON, then OSRM upgrade
   const [routeSegments, setRouteSegments] = useState<RouteSegment[]>([]);
-  const osrmCacheRef = useRef<Map<string, RouteSegment[]>>(new Map());
 
   useEffect(() => {
     if (!selectedShipmentId) {
