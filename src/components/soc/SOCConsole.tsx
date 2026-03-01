@@ -408,8 +408,8 @@ export default function SOCConsole() {
                 positions={seg.positions}
                 pathOptions={
                   seg.mode === "sea"
-                    ? { color: "#3B82F6", weight: 2, opacity: 0.4, dashArray: "4 8 4 8" }
-                    : { color: "#3B82F6", weight: 2, opacity: 0.3, dashArray: "8 6" }
+                    ? { color: "#60A5FA", weight: 3, opacity: 0.7, dashArray: "4 8 4 8" }
+                    : { color: "#60A5FA", weight: 3, opacity: 0.65, dashArray: "8 6" }
                 }
               />
             ))}
