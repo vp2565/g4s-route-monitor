@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { DemoUser, UserRole, DEMO_USERS, isDarkRole } from "@/types";
 
 interface AuthContextType {
@@ -12,10 +12,30 @@ interface AuthContextType {
   isDarkTheme: boolean;
 }
 
+const AUTH_STORAGE_KEY = "g4s-demo-user";
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<DemoUser | null>(null);
+  const [user, setUser] = useState<DemoUser | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const stored = sessionStorage.getItem(AUTH_STORAGE_KEY);
+      if (stored) return JSON.parse(stored) as DemoUser;
+    } catch {
+      // ignore
+    }
+    return null;
+  });
+
+  // Persist user to sessionStorage on change
+  useEffect(() => {
+    if (user) {
+      sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+    } else {
+      sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    }
+  }, [user]);
 
   const login = useCallback((user: DemoUser) => {
     setUser(user);

@@ -45,24 +45,27 @@ export function Sidebar() {
           collapsed ? "w-16" : "w-56",
           isDarkTheme
             ? "bg-black border-gray-800"
-            : "bg-[#111827] border-gray-800"
+            : "bg-gray-50 border-gray-200"
         )}
       >
         {/* Logo */}
         <div
           className={cn(
-            "flex items-center border-b border-gray-800 h-14",
-            collapsed ? "justify-center px-2" : "px-4"
+            "flex items-center h-14 border-b",
+            collapsed ? "justify-center px-2" : "px-4",
+            isDarkTheme ? "border-gray-800" : "border-gray-200"
           )}
         >
           {collapsed ? (
-            <span className="text-lg font-bold text-white">
+            <span className={cn("text-lg font-bold", isDarkTheme ? "text-white" : "text-gray-900")}>
               G<span className="text-g4s-red">4</span>S
             </span>
           ) : (
-            <span className="text-lg font-bold text-white tracking-tight">
+            <span className={cn("text-lg font-bold tracking-tight", isDarkTheme ? "text-white" : "text-gray-900")}>
               G<span className="text-g4s-red">4</span>S{" "}
-              <span className="text-gray-400 font-normal">Telematix</span>
+              <span className={isDarkTheme ? "text-gray-400 font-normal" : "text-gray-500 font-normal"}>
+                Telematix
+              </span>
             </span>
           )}
         </div>
@@ -83,7 +86,9 @@ export function Sidebar() {
                   collapsed && "justify-center px-2",
                   isActive
                     ? "bg-g4s-red/10 text-g4s-red"
-                    : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                    : isDarkTheme
+                      ? "text-gray-400 hover:bg-gray-800 hover:text-white"
+                      : "text-gray-600 hover:bg-gray-200 hover:text-gray-900"
                 )}
               >
                 <Icon className="h-5 w-5 shrink-0" />
@@ -107,13 +112,16 @@ export function Sidebar() {
         </nav>
 
         {/* Collapse toggle */}
-        <div className="border-t border-gray-800 p-2">
+        <div className={cn("border-t p-2", isDarkTheme ? "border-gray-800" : "border-gray-200")}>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              "w-full text-gray-400 hover:text-white hover:bg-gray-800",
+              "w-full",
+              isDarkTheme
+                ? "text-gray-400 hover:text-white hover:bg-gray-800"
+                : "text-gray-500 hover:text-gray-900 hover:bg-gray-200",
               collapsed && "px-2"
             )}
           >
