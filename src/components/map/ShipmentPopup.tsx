@@ -67,6 +67,22 @@ export function ShipmentPopup({ shipment }: ShipmentPopupProps) {
         <span style={{ color: "#374151" }}>{shipment.destination}</span>
       </div>
 
+      {/* Driver & vehicle */}
+      <div
+        style={{
+          fontSize: 11,
+          color: "#6B7280",
+          marginBottom: 4,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <span>{shipment.driverName}</span>
+        <span style={{ fontFamily: "monospace", fontSize: 10, color: "#9CA3AF" }}>
+          {shipment.vehiclePlate}
+        </span>
+      </div>
+
       {shipment.estimatedArrival && (
         <div style={{ fontSize: 11, color: "#6B7280", marginBottom: 4 }}>
           ETA:{" "}

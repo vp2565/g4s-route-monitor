@@ -171,18 +171,67 @@ export default function MapConsole() {
     [mappableShipments]
   );
 
-  // Route polyline for selected shipment
-  const selectedRoute = useMemo(() => {
-    if (!selectedShipmentId) return null;
+  // Route polyline for selected shipment — fetched from OSRM for road-snapped paths
+  const [selectedRoute, setSelectedRoute] = useState<{
+    positions: [number, number][];
+    color: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!selectedShipmentId) {
+      setSelectedRoute(null);
+      return;
+    }
     const shipment = allShipments.find((s) => s.id === selectedShipmentId);
-    if (!shipment?.routeTemplateId) return null;
+    if (!shipment?.routeTemplateId) {
+      setSelectedRoute(null);
+      return;
+    }
     const route = getRouteTemplateById(shipment.routeTemplateId);
-    if (!route) return null;
-    // Convert [lng, lat] → [lat, lng] for Leaflet
-    const positions: [number, number][] = route.coordinates.map(
-      ([lng, lat]) => [lat, lng]
-    );
-    return { positions, color: getMarkerColor(shipment) };
+    if (!route || route.waypoints.length < 2) {
+      setSelectedRoute(null);
+      return;
+    }
+
+    const color = getMarkerColor(shipment);
+    let cancelled = false;
+
+    // Build OSRM coordinate string from waypoints
+    const coords = route.waypoints
+      .map((wp) => `${wp.location.lng},${wp.location.lat}`)
+      .join(";");
+    const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`;
+
+    fetch(osrmUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.code === "Ok" && data.routes?.[0]?.geometry?.coordinates) {
+          const positions: [number, number][] =
+            data.routes[0].geometry.coordinates.map(
+              ([lng, lat]: [number, number]) => [lat, lng] as [number, number]
+            );
+          setSelectedRoute({ positions, color });
+        } else {
+          // Fallback to seed data straight lines
+          const positions: [number, number][] = route.coordinates.map(
+            ([lng, lat]) => [lat, lng] as [number, number]
+          );
+          setSelectedRoute({ positions, color });
+        }
+      })
+      .catch(() => {
+        if (cancelled) return;
+        // Fallback to seed data
+        const positions: [number, number][] = route.coordinates.map(
+          ([lng, lat]) => [lat, lng] as [number, number]
+        );
+        setSelectedRoute({ positions, color });
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedShipmentId, allShipments]);
 
   const handleToggleLayer = useCallback(() => {
@@ -314,6 +363,33 @@ export default function MapConsole() {
             );
           })}
         </MapContainer>
+
+        {/* Legend */}
+        <div
+          className={`absolute bottom-4 left-4 z-[1000] rounded shadow-md border px-3 py-2 text-[11px] space-y-1 ${
+            isDarkTheme
+              ? "bg-gray-900/90 border-gray-700 text-gray-300"
+              : "bg-white/90 border-gray-200 text-gray-600"
+          }`}
+        >
+          <div className="font-semibold text-xs mb-1.5">Shipment Status</div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#22C55E" }} />
+            On Schedule
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#EAB308" }} />
+            At Risk / Delayed
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#EF4444" }} />
+            Active Alerts
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#9CA3AF" }} />
+            Completed
+          </div>
+        </div>
 
         <MapControls
           isDark={isDarkTheme}
