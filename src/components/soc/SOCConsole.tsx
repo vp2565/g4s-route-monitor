@@ -195,6 +195,18 @@ function createPulsingIcon() {
   });
 }
 
+// Vehicle current position (green) icon
+function createVehicleIcon() {
+  return L.divIcon({
+    className: "",
+    html: `<div style="width:22px;height:22px;border-radius:50%;background:#22C55E;border:2px solid #fff;box-shadow:0 0 8px rgba(34,197,94,0.5);display:flex;align-items:center;justify-content:center">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17a2 2 0 01-2-2V7a2 2 0 012-2h10l4 4v6a2 2 0 01-2 2M5 17a2 2 0 100 4 2 2 0 000-4zm12 0a2 2 0 100 4 2 2 0 000-4z"/></svg>
+    </div>`,
+    iconSize: [22, 22],
+    iconAnchor: [11, 11],
+  });
+}
+
 // Field unit (blue) icon
 function createFieldUnitIcon() {
   return L.divIcon({
@@ -457,6 +469,28 @@ export default function SOCConsole() {
               </Marker>
             )}
 
+            {/* Shipment current position (green vehicle marker) — shown when different from alert location */}
+            {selectedAlert && selectedShipment && (() => {
+              const shipPos = shipmentPositions.get(selectedShipment.id);
+              if (!shipPos) return null;
+              const alertPos: [number, number] = [selectedAlert.location.lat, selectedAlert.location.lng];
+              const dist = haversine(shipPos, alertPos);
+              if (dist < 2) return null; // less than 2km apart, skip (same location)
+              return (
+                <Marker
+                  position={shipPos}
+                  icon={createVehicleIcon()}
+                >
+                  <Tooltip direction="top" offset={[0, -14]} permanent>
+                    <div style={{ fontFamily: "system-ui", fontSize: 11 }}>
+                      <div style={{ fontWeight: 700, color: "#22C55E" }}>Current Position</div>
+                      <div style={{ fontSize: 10, color: "#6B7280" }}>{selectedShipment.id} · {selectedShipment.progressPercent}%</div>
+                    </div>
+                  </Tooltip>
+                </Marker>
+              );
+            })()}
+
             {/* Field response unit (blue dot) */}
             {selectedFieldResponse?.currentPosition && (
               <>
@@ -564,6 +598,10 @@ export default function SOCConsole() {
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#EF4444", boxShadow: "0 0 6px rgba(239,68,68,0.6)" }} />
               Incident Location
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#22C55E", border: "1px solid #fff" }} />
+              Vehicle Position
             </div>
             <div className="flex items-center gap-2">
               <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#3B82F6" }} />
