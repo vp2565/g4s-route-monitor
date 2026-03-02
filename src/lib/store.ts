@@ -246,3 +246,21 @@ export function getConditionDataByShipmentId(
 ): ConditionData | undefined {
   return conditionData.find((c) => c.shipmentId === shipmentId);
 }
+
+// --- Mutation helpers (in-memory only, resets on reload) ---
+
+export function addShipment(shipment: Shipment): void {
+  shipments.push(shipment);
+}
+
+export function getNextShipmentId(): string {
+  let maxNum = 0;
+  for (const s of shipments) {
+    const match = s.id.match(/G4S-SHP-2026-(\d+)/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
+  }
+  return `G4S-SHP-2026-${String(maxNum + 1).padStart(4, "0")}`;
+}

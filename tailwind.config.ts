@@ -11,17 +11,17 @@ const config: Config = {
   	extend: {
   		colors: {
   			'g4s-red': {
-  				DEFAULT: '#C8102E',
-  				50: '#FEF2F2',
-  				100: '#FDE3E3',
-  				200: '#FCCCCC',
-  				300: '#F9A3A3',
-  				400: '#F26B6B',
-  				500: '#E63946',
-  				600: '#C8102E',
-  				700: '#A80D25',
-  				800: '#8B0F22',
-  				900: '#741122',
+  				'50': '#FEF2F2',
+  				'100': '#FDE3E3',
+  				'200': '#FCCCCC',
+  				'300': '#F9A3A3',
+  				'400': '#F26B6B',
+  				'500': '#E63946',
+  				'600': '#C8102E',
+  				'700': '#A80D25',
+  				'800': '#8B0F22',
+  				'900': '#741122',
+  				DEFAULT: '#C8102E'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -68,6 +68,28 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
