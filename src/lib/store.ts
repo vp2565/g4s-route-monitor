@@ -264,3 +264,32 @@ export function getNextShipmentId(): string {
   }
   return `G4S-SHP-2026-${String(maxNum + 1).padStart(4, "0")}`;
 }
+
+/** Merge partial updates into an existing alert (in-memory). */
+export function updateAlert(
+  id: string,
+  patch: Partial<Alert>
+): Alert | undefined {
+  const idx = alerts.findIndex((a) => a.id === id);
+  if (idx === -1) return undefined;
+  Object.assign(alerts[idx], patch);
+  return alerts[idx];
+}
+
+/** Add an audit entry to the front of the array. */
+export function addAuditEntry(entry: AuditEntry): void {
+  auditEntries.unshift(entry);
+}
+
+/** Generate next sequential audit ID. */
+export function getNextAuditId(): string {
+  let maxNum = 0;
+  for (const a of auditEntries) {
+    const match = a.id.match(/aud-(\d+)/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
+  }
+  return `aud-${String(maxNum + 1).padStart(3, "0")}`;
+}

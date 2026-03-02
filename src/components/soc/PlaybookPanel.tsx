@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   CheckCircle2,
   Circle,
@@ -13,6 +14,7 @@ import {
   MapPin,
   Clock,
   Truck,
+  ExternalLink,
 } from "lucide-react";
 import type { Alert, SOCPlaybook, FieldResponse } from "@/lib/types";
 
@@ -330,6 +332,16 @@ export function PlaybookPanel({ alert, playbook, fieldResponse }: PlaybookPanelP
 
   return (
     <div className="w-[350px] flex flex-col border-l border-slate-800 bg-slate-950 shrink-0 overflow-y-auto">
+      {/* View Full Details link */}
+      <div className="px-3 py-2 border-b border-slate-800">
+        <Link
+          href={`/alerts/${alert.id}`}
+          className="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1"
+        >
+          View Full Details <ExternalLink size={10} />
+        </Link>
+      </div>
+
       {/* Playbook section */}
       <div className="px-3 py-2 border-b border-slate-800">
         <div className="text-[10px] font-semibold text-slate-400 uppercase mb-2 flex items-center gap-1.5">

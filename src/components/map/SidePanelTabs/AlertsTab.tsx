@@ -1,5 +1,7 @@
+import Link from "next/link";
 import type { Alert } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ExternalLink } from "lucide-react";
 
 interface AlertsTabProps {
   alerts: Alert[];
@@ -91,9 +93,20 @@ export function AlertsTab({ alerts, isDark }: AlertsTabProps) {
             <div className={cn("text-[11px]", isDark ? "text-gray-400" : "text-gray-500")}>
               {formatType(alert.type)} — {alert.locationName}
             </div>
-            {alert.slaBreached && (
-              <div className="text-[10px] text-red-400 font-medium mt-1">SLA BREACHED</div>
-            )}
+            <div className="flex items-center justify-between mt-1">
+              {alert.slaBreached && (
+                <span className="text-[10px] text-red-400 font-medium">SLA BREACHED</span>
+              )}
+              <Link
+                href={`/alerts/${alert.id}`}
+                className={cn(
+                  "text-[10px] flex items-center gap-0.5 ml-auto",
+                  isDark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-500"
+                )}
+              >
+                Details <ExternalLink size={9} />
+              </Link>
+            </div>
           </div>
         );
       })}

@@ -1,12 +1,30 @@
 "use client";
 
+import { useMemo } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { useAuth } from "@/contexts/auth-context";
-import { AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { getAllAlerts } from "@/lib/store";
+import { AlertTable } from "@/components/alerts/AlertTable";
+
+const USER_CUSTOMER_MAP: Record<string, string> = {
+  "usr-002": "cust-001",
+  "usr-003": "cust-003",
+};
 
 export default function AlertsPage() {
-  const { isDarkTheme } = useAuth();
+  const { user, isDarkTheme } = useAuth();
+
+  const customerScope = user ? USER_CUSTOMER_MAP[user.id] ?? null : null;
+  const isCustomerScoped =
+    user?.role === "customer_admin" || user?.role === "customer_user";
+
+  const alerts = useMemo(() => {
+    const all = getAllAlerts();
+    if (isCustomerScoped && customerScope) {
+      return all.filter((a) => a.customerId === customerScope);
+    }
+    return all;
+  }, [isCustomerScoped, customerScope]);
 
   return (
     <div className="flex flex-col h-full">
@@ -14,34 +32,12 @@ export default function AlertsPage() {
         title="Alert Inbox"
         description="Active alerts across all monitored shipments"
       />
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <AlertTriangle
-            className={cn(
-              "h-16 w-16 mx-auto",
-              isDarkTheme ? "text-gray-600" : "text-gray-300"
-            )}
-          />
-          <div>
-            <h2
-              className={cn(
-                "text-lg font-semibold",
-                isDarkTheme ? "text-gray-300" : "text-gray-600"
-              )}
-            >
-              Alert Inbox
-            </h2>
-            <p
-              className={cn(
-                "text-sm mt-1",
-                isDarkTheme ? "text-gray-500" : "text-gray-400"
-              )}
-            >
-              20 alerts with SLA timers, severity levels, and SOC playbook
-              binding — coming in Session 3
-            </p>
-          </div>
-        </div>
+      <div className="flex-1 overflow-hidden p-4">
+        <AlertTable
+          alerts={alerts}
+          isDark={isDarkTheme}
+          hideCustomerFilter={isCustomerScoped}
+        />
       </div>
     </div>
   );

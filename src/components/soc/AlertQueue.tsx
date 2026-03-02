@@ -1,67 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AlertTriangle } from "lucide-react";
+import type { Alert } from "@/lib/types";
 import {
-  AlertTriangle,
-  ThermometerSun,
-  WifiOff,
-  BatteryLow,
-  Clock,
-  Shield,
-  Droplets,
-  MapPin,
-  Lightbulb,
-  DoorOpen,
-  Zap,
-} from "lucide-react";
-import type { Alert, AlertType, AlertSeverity } from "@/lib/types";
-
-// --- Severity icon + color mapping ---
-
-const SEVERITY_COLORS: Record<AlertSeverity, string> = {
-  critical: "#EF4444",
-  high: "#F97316",
-  medium: "#EAB308",
-  low: "#6B7280",
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ALERT_TYPE_ICONS: Record<AlertType, any> = {
-  route_deviation: MapPin,
-  geofence_breach: Shield,
-  unauthorized_stop: MapPin,
-  temperature_breach: ThermometerSun,
-  humidity_breach: Droplets,
-  shock_detected: Zap,
-  light_exposure: Lightbulb,
-  door_open: DoorOpen,
-  signal_loss: WifiOff,
-  battery_low: BatteryLow,
-  late_departure: Clock,
-  eta_exceeded: Clock,
-  tampering: AlertTriangle,
-};
-
-// Tive-style status pill colors
-const STATUS_PILL_STYLES: Record<string, { bg: string; text: string; label: string }> = {
-  new: { bg: "#991B1B", text: "#FECACA", label: "NEW" },
-  acknowledged: { bg: "#DC2626", text: "#FEE2E2", label: "ACK" },
-  investigating: { bg: "#DC2626", text: "#FEE2E2", label: "INVESTIGATING" },
-  dispatched: { bg: "#D97706", text: "#FEF3C7", label: "DISPATCHED" },
-  resolved: { bg: "#16A34A", text: "#DCFCE7", label: "RESOLVED" },
-  closed: { bg: "#6B7280", text: "#E5E7EB", label: "CLOSED" },
-  false_alarm: { bg: "#6B7280", text: "#E5E7EB", label: "FALSE ALARM" },
-};
-
-function formatTimeSince(isoDate: string): string {
-  const diff = Date.now() - new Date(isoDate).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ${mins % 60}m ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
-}
+  SEVERITY_COLORS,
+  STATUS_PILL_STYLES,
+  ALERT_TYPE_ICONS,
+  formatTimeSince,
+} from "@/lib/alert-utils";
 
 function SLACountdown({ deadline: deadlineStr, breached }: { deadline: string; breached: boolean }) {
   const [remaining, setRemaining] = useState("");
