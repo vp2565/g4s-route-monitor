@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Map,
@@ -56,18 +57,14 @@ export function Sidebar() {
             isDarkTheme ? "border-gray-800" : "border-gray-200"
           )}
         >
-          {collapsed ? (
-            <span className={cn("text-lg font-bold", isDarkTheme ? "text-white" : "text-gray-900")}>
-              G<span className="text-g4s-red">4</span>S
-            </span>
-          ) : (
-            <span className={cn("text-lg font-bold tracking-tight", isDarkTheme ? "text-white" : "text-gray-900")}>
-              G<span className="text-g4s-red">4</span>S{" "}
-              <span className={isDarkTheme ? "text-gray-400 font-normal" : "text-gray-500 font-normal"}>
-                Telematix
-              </span>
-            </span>
-          )}
+          <Image
+            src={isDarkTheme ? "/logo-white.png" : "/logo-black.png"}
+            alt="G4S Telematix"
+            width={180}
+            height={36}
+            priority
+            className={cn("h-7 w-auto", collapsed && "h-5")}
+          />
         </div>
 
         {/* Navigation */}

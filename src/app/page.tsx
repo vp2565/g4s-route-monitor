@@ -6,7 +6,8 @@ import { DEMO_USERS, ROLE_STYLES, DemoUser } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { PrototypeBanner } from "@/components/layout/prototype-banner";
-import { Shield, AlertTriangle } from "lucide-react";
+import Image from "next/image";
+import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
 
 export default function LoginPage() {
@@ -30,12 +31,15 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Shield className="h-10 w-10 text-g4s-red" />
-            <h1 className="text-3xl font-bold text-white tracking-tight">
-              G<span className="text-g4s-red">4</span>S{" "}
-              <span className="text-gray-400 font-normal">Telematix</span>
-            </h1>
+          <div className="flex items-center justify-center mb-4">
+            <Image
+              src="/logo-white.png"
+              alt="G4S Telematix"
+              width={320}
+              height={64}
+              priority
+              className="h-14 w-auto"
+            />
           </div>
           <p className="text-gray-400 text-lg">
             Route Monitoring Platform
